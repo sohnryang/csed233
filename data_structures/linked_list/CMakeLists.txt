@@ -1,0 +1,15 @@
+add_library(LinkedList linked_list.cpp)
+add_library(DoubleLinkedList double_linked_list.cpp)
+
+enable_testing()
+add_compile_options("$<$<CONFIG:DEBUG>:-fno-omit-frame-pointer>")
+add_compile_options("$<$<CONFIG:DEBUG>:-fsanitize=address>")
+add_link_options("$<$<CONFIG:DEBUG>:-fsanitize=address>")
+add_executable(list_tests list_tests.cpp)
+target_link_libraries(list_tests GTest::gtest_main)
+include(GoogleTest)
+gtest_discover_tests(list_tests)
+
+add_executable(list_fuzz list_fuzz.cpp)
+target_compile_options(list_fuzz PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,fuzzer>")
+target_link_libraries(list_fuzz PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,fuzzer>")

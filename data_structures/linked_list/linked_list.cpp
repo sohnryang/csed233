@@ -1,30 +1,7 @@
-#include <iostream>
-#include <ostream>
-
-using std::cin;
-using std::cout;
-using std::endl;
-using std::ostream;
-
-enum Commands {
-  PrintAll = 0,
-  PrintSelected = 1,
-  Select = 2,
-  NextNode = 3,
-  Insert = 4,
-  Remove = 5,
-  Size = 6,
-  Quit = -1
-};
-
 struct Node {
   int info;
   Node *next_ptr;
 };
-
-ostream &operator<<(ostream &os, Node const &node) {
-  return os << "{info: " << node.info << "}";
-}
 
 class LinkedList {
 private:
@@ -93,59 +70,4 @@ int LinkedList::size() const {
     current = current->next_ptr;
   }
   return result;
-}
-
-int main() {
-  LinkedList ls;
-  bool quit_loop = false;
-  while (!quit_loop) {
-    int cmd;
-    cin >> cmd;
-    switch (cmd) {
-    case Commands::PrintAll: {
-      Node *current = ls.first_node();
-      while (current) {
-        cout << "Node@" << (void *)current << ": " << *current << endl;
-        current = current->next_ptr;
-      }
-      break;
-    }
-    case Commands::PrintSelected: {
-      Node *node = ls.get_selected();
-      if (node == nullptr) {
-        break;
-      }
-      cout << "Node@" << (void *)node << ": " << *node << endl;
-      break;
-    }
-    case Commands::Select: {
-      int index;
-      cin >> index;
-      ls.select_index(index);
-      break;
-    }
-    case Commands::NextNode:
-      ls.select_next();
-      break;
-    case Commands::Insert: {
-      int info;
-      cin >> info;
-      Node node{info, nullptr};
-      ls.insert(node);
-      break;
-    }
-    case Commands::Remove:
-      ls.remove();
-      break;
-    case Commands::Size:
-      cout << ls.size() << endl;
-      break;
-    case Commands::Quit:
-      quit_loop = true;
-      break;
-    default:
-      cout << "Unknown command: " << cmd << endl;
-    }
-  }
-  return 0;
 }
