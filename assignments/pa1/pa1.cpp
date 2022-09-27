@@ -42,14 +42,13 @@ void task_1(ofstream &fout) {
 
     *primeSearch*
         Input
-        - int num1: input number for starting range
-        - int num2: input number for ending range
+        - int n: input number for ending range
         Output
-        - int numPrimes: The total number of prime numbers between num1 and num2
-        int primeSearch(int num1, int num2) {
+        - int numPrimes: The total number of prime numbers less than n
+        int primeSearch(int n) {
             int numPrimes = 0;
             int ctr = 0;
-            for (int i = num1; i <= num2; i++) {
+            for (int i = 0; i < n; i++) {
                 for(int j = 2; j <= sqrt(i); j++) {
                     if(i % j == 0) {
                         ctr++;
@@ -67,8 +66,8 @@ void task_1(ofstream &fout) {
     Choices
         1: O( log(n) )
         2: O( n log(n) )
-        3: O( n )
-        4: O( n^2 )
+        3: O( n^(1/2) )
+        4: O( n*n^(1/2) )
 */
 void task_2(ofstream &fout) {
   int answer = 4; // TODO: Change to your answer
