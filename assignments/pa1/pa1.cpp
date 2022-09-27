@@ -98,67 +98,89 @@ void task_2(ofstream &fout) {
    spacebar
         - “error” if the index is out of range
 */
-struct Node {
+struct TwoWayNode {
   int info;
-  Node *next_ptr;
+  TwoWayNode *prev_ptr, *next_ptr;
 };
 
-class LinkedList {
+class DoubleLinkedList {
 private:
-  Node *head;
-  Node *selected_before;
+  TwoWayNode *head, *tail;
 
 public:
-  LinkedList();
-  ~LinkedList();
-  Node *first_node() const;
-  Node *get_selected() const;
-  void select_next();
-  void select_index(int index);
-  void insert(const Node &node);
-  void remove();
+  DoubleLinkedList();
+  ~DoubleLinkedList();
+  int size() const;
+  bool empty() const;
+  TwoWayNode *head_node() const;
+  TwoWayNode *tail_node() const;
+  TwoWayNode *get_index(int index) const;
+  void insert(TwoWayNode *place, TwoWayNode *inserted);
+  void push_front(TwoWayNode *node);
+  void push_back(TwoWayNode *node);
+  void remove(TwoWayNode *node);
 };
 
-LinkedList::LinkedList() {
-  this->head = new Node();
-  this->selected_before = this->head;
+DoubleLinkedList::DoubleLinkedList() {
+  this->head = new TwoWayNode();
+  this->tail = new TwoWayNode();
+  this->head->next_ptr = this->tail;
+  this->tail->prev_ptr = this->head;
 }
 
-LinkedList::~LinkedList() {
-  Node *current_node = this->head;
-  while (current_node) {
-    Node *next_node = current_node->next_ptr;
-    delete current_node;
-    current_node = next_node;
+DoubleLinkedList::~DoubleLinkedList() {
+  auto current = this->head_node();
+  while (current) {
+    auto next_node = current->next_ptr;
+    delete current;
+    current = next_node;
   }
 }
 
-Node *LinkedList::get_selected() const {
-  return this->selected_before->next_ptr;
+int DoubleLinkedList::size() const {
+  int result = 0;
+  auto current = this->head->next_ptr;
+  while (current != this->tail) {
+    result++;
+    current = current->next_ptr;
+  }
+  return result;
 }
 
-Node *LinkedList::first_node() const { return this->head->next_ptr; }
-
-void LinkedList::select_next() {
-  this->selected_before = this->selected_before->next_ptr;
+bool DoubleLinkedList::empty() const {
+  return this->head->next_ptr == this->tail;
 }
 
-void LinkedList::select_index(int index) {
-  this->selected_before = this->head;
-  for (int i = 0; i < index; ++i)
-    this->select_next();
+TwoWayNode *DoubleLinkedList::head_node() const { return this->head; }
+TwoWayNode *DoubleLinkedList::tail_node() const { return this->tail; }
+
+TwoWayNode *DoubleLinkedList::get_index(int index) const {
+  auto selected = this->head_node()->next_ptr;
+  for (int i = 0; i < index; i++)
+    selected = selected->next_ptr;
+  return selected;
 }
 
-void LinkedList::insert(const Node &node) {
-  Node *new_node = new Node(node);
-  new_node->next_ptr = this->selected_before->next_ptr;
-  this->selected_before->next_ptr = new_node;
+void DoubleLinkedList::insert(TwoWayNode *place, TwoWayNode *inserted) {
+  auto before = place->prev_ptr, after = place;
+  inserted->prev_ptr = before;
+  inserted->next_ptr = after;
+  before->next_ptr = inserted;
+  after->prev_ptr = inserted;
 }
 
-void LinkedList::remove() {
-  Node *deleted_node = this->selected_before->next_ptr;
-  this->selected_before->next_ptr = deleted_node->next_ptr;
-  delete deleted_node;
+void DoubleLinkedList::push_front(TwoWayNode *node) {
+  this->insert(this->head_node()->next_ptr, node);
+}
+
+void DoubleLinkedList::push_back(TwoWayNode *node) {
+  this->insert(this->tail_node(), node);
+}
+
+void DoubleLinkedList::remove(TwoWayNode *node) {
+  auto before = node->prev_ptr, after = node->next_ptr;
+  before->next_ptr = after;
+  after->prev_ptr = before;
 }
 
 void task_3(ofstream &fout, InstructionSequence *instr_seq) {
@@ -169,7 +191,7 @@ void task_3(ofstream &fout, InstructionSequence *instr_seq) {
 
   int size = 0;
   bool failed = false;
-  LinkedList ls;
+  DoubleLinkedList ls;
   for (int i = 0; i < instr_seq->length; i++) {
     string command = instr_seq->instructions[i].command;
     int index = instr_seq->instructions[i].value;
@@ -178,17 +200,19 @@ void task_3(ofstream &fout, InstructionSequence *instr_seq) {
         failed = true;
         break;
       }
-      ls.select_index(index);
-      Node new_node{size, nullptr};
-      ls.insert(new_node);
+      auto place = ls.get_index(index);
+      auto new_node = new TwoWayNode();
+      new_node->info = size;
+      ls.insert(place, new_node);
       size++;
     } else if (command.compare("delete") == 0) {
       if (index < 0 || index >= size) {
         failed = true;
         break;
       }
-      ls.select_index(index);
-      ls.remove();
+      auto removed = ls.get_index(index);
+      ls.remove(removed);
+      delete removed;
       size--;
     } else {
       cerr << "Invalid command" << endl;
@@ -197,14 +221,13 @@ void task_3(ofstream &fout, InstructionSequence *instr_seq) {
   }
   if (failed)
     answer = "error";
-  else {
-    ls.select_index(0);
+  else if (size != 0) {
+    auto node = ls.get_index(0);
     for (int i = 0; i < size; ++i) {
-      Node *node = ls.get_selected();
       if (i != 0)
         answer += " ";
       answer += to_string(node->info);
-      ls.select_next();
+      node = node->next_ptr;
     }
   }
   ///////////      End of Implementation      /////////////
@@ -244,29 +267,31 @@ void task_4(ofstream &fout, InstructionSequence *instr_seq) {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
 
-  LinkedList ls;
+  DoubleLinkedList ls;
   bool failed = false;
   for (int i = 0; i < instr_seq->length; i++) {
     string command = instr_seq->instructions[i].command;
     int arg = instr_seq->instructions[i].value;
     if (command.compare("push") == 0) {
-      Node new_node{arg, nullptr};
-      ls.insert(new_node);
+      auto new_node = new TwoWayNode();
+      new_node->info = arg;
+      ls.push_front(new_node);
     } else if (command.compare("pop") == 0) {
-      Node *popped = ls.get_selected();
-      if (!popped) {
+      if (ls.empty()) {
         failed = true;
         break;
       }
-      ls.remove();
+      auto top = ls.head_node()->next_ptr;
+      ls.remove(top);
     } else if (command.compare("top") == 0) {
-      Node *top = ls.get_selected();
       if (!answer.empty())
         answer += " ";
-      if (!top)
-        answer += to_string(-1);
-      else
-        answer += to_string(top->info);
+      if (ls.empty()) {
+        answer += "-1";
+        continue;
+      }
+      auto top = ls.head_node()->next_ptr;
+      answer += to_string(top->info);
     } else {
       cerr << "Invalid command" << endl;
       exit(-1);
@@ -302,63 +327,13 @@ void task_4(ofstream &fout, InstructionSequence *instr_seq) {
         - “error” if the “dequeue” operation is executed on an empty queue
 */
 
-struct TwoWayNode {
-  int info;
-  TwoWayNode *prev_ptr, *next_ptr;
-};
-
-class Queue {
-private:
-  TwoWayNode *head, *tail, *selected_prev, *selected_next;
-
-public:
-  Queue();
-  ~Queue();
-  TwoWayNode *last_node() const;
-  void push_front(const TwoWayNode &node);
-  TwoWayNode *pop_back();
-};
-
-Queue::Queue() {
-  this->head = new TwoWayNode();
-  this->tail = new TwoWayNode();
-  this->head->next_ptr = this->tail;
-  this->tail->prev_ptr = this->head;
-}
-
-Queue::~Queue() {
-  TwoWayNode *current = this->head;
-  while (current) {
-    TwoWayNode *next_node = current->next_ptr;
-    delete current;
-    current = next_node;
-  }
-}
-
-TwoWayNode *Queue::last_node() const { return this->tail->prev_ptr; }
-
-void Queue::push_front(const TwoWayNode &node) {
-  TwoWayNode *new_node = new TwoWayNode(node);
-  new_node->next_ptr = this->head->next_ptr;
-  new_node->next_ptr->prev_ptr = new_node;
-  new_node->prev_ptr = this->head;
-  this->head->next_ptr = new_node;
-}
-
-TwoWayNode *Queue::pop_back() {
-  TwoWayNode *popped = this->tail->prev_ptr;
-  this->tail->prev_ptr = popped->prev_ptr;
-  popped->prev_ptr->next_ptr = this->tail;
-  return popped;
-};
-
 void task_5(ofstream &fout, InstructionSequence *instr_seq) {
   string answer;
 
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
 
-  Queue q;
+  DoubleLinkedList q;
   int size = 0;
   bool failed = false;
   for (int i = 0; i < instr_seq->length; i++) {
@@ -366,15 +341,17 @@ void task_5(ofstream &fout, InstructionSequence *instr_seq) {
     int value = instr_seq->instructions[i].value;
 
     if (command.compare("enqueue") == 0) {
-      TwoWayNode node{value, nullptr, nullptr};
-      q.push_front(node);
+      auto node = new TwoWayNode();
+      node->info = value;
+      q.push_back(node);
       size++;
     } else if (command.compare("dequeue") == 0) {
       if (size == 0) {
         failed = true;
         break;
       }
-      auto popped = q.pop_back();
+      auto popped = q.head_node()->next_ptr;
+      q.remove(popped);
       delete popped;
       size--;
     } else {
@@ -388,11 +365,12 @@ void task_5(ofstream &fout, InstructionSequence *instr_seq) {
   else if (size == 0)
     answer = "empty";
   else {
+    auto node = q.head_node()->next_ptr;
     for (int i = 0; i < size; ++i) {
       if (i != 0)
         answer += " ";
-      auto popped = q.pop_back();
-      answer += to_string(popped->info);
+      answer += to_string(node->info);
+      node = node->next_ptr;
     }
   }
   ///////////      End of Implementation      /////////////
