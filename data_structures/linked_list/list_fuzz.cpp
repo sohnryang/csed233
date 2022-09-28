@@ -18,21 +18,21 @@ int fuzz(const uint8_t *data, size_t size) {
   // 0b10: get an element from the index
   // 0b11: remove an element from the index
   // Indexes will be calculated by taking arg modulo (size of the list).
-  DoubleLinkedList dl;
+  DoubleLinkedList<int> dl;
   int list_size = 0;
   for (int i = 1; i < size; i += 2) {
     int command = data[i - 1] & 0b11, arg = data[i];
     switch (command) {
     case PushBack: {
-      auto node = new TwoWayNode();
-      node->info = arg;
+      auto node = new TwoWayNode<int>();
+      node->data = arg;
       dl.push_back(node);
       list_size++;
       break;
     }
     case PushFront: {
-      auto node = new TwoWayNode();
-      node->info = arg;
+      auto node = new TwoWayNode<int>();
+      node->data = arg;
       dl.push_front(node);
       list_size++;
       break;

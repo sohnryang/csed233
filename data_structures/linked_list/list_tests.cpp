@@ -2,50 +2,50 @@
 #include <gtest/gtest.h>
 
 TEST(DoubleLinkedListTest, TestInit) {
-  DoubleLinkedList dl;
+  DoubleLinkedList<int> dl;
   EXPECT_EQ(dl.size(), 0);
   EXPECT_TRUE(dl.empty());
 }
 
 TEST(DoubleLinkedListTest, TestPush) {
   {
-    DoubleLinkedList dl;
+    DoubleLinkedList<int> dl;
     for (int i = 0; i < 5; i++) {
-      auto node = new TwoWayNode();
-      node->info = i;
+      auto node = new TwoWayNode<int>();
+      node->data = i;
       dl.push_back(node);
     }
     EXPECT_EQ(dl.size(), 5);
     EXPECT_FALSE(dl.empty());
     for (int i = 0; i < 5; i++) {
       auto node = dl.get_index(i);
-      EXPECT_EQ(node->info, i);
+      EXPECT_EQ(node->data, i);
     }
   }
 
   {
-    DoubleLinkedList dl;
+    DoubleLinkedList<int> dl;
     for (int i = 0; i < 5; i++) {
-      auto node = new TwoWayNode();
-      node->info = i;
+      auto node = new TwoWayNode<int>();
+      node->data = i;
       dl.push_front(node);
     }
     EXPECT_EQ(dl.size(), 5);
     EXPECT_FALSE(dl.empty());
     for (int i = 0; i < 5; i++) {
       auto node = dl.get_index(i);
-      EXPECT_EQ(node->info, 4 - i);
+      EXPECT_EQ(node->data, 4 - i);
     }
   }
 }
 
 TEST(DoubleLinkedListTest, TestIndex) {
-  DoubleLinkedList dl;
-  TwoWayNode *nodes[5];
+  DoubleLinkedList<int> dl;
+  TwoWayNode<int> *nodes[5];
   for (int i = 0; i < 5; i++) {
-    auto node = new TwoWayNode();
+    auto node = new TwoWayNode<int>();
     nodes[i] = node;
-    node->info = i;
+    node->data = i;
     dl.push_back(node);
   }
   for (int i = 0; i < 5; i++)
@@ -54,9 +54,9 @@ TEST(DoubleLinkedListTest, TestIndex) {
 
 TEST(DoubleLinkedListTest, TestRemove) {
   {
-    DoubleLinkedList dl;
-    auto node = new TwoWayNode();
-    node->info = 1;
+    DoubleLinkedList<int> dl;
+    auto node = new TwoWayNode<int>();
+    node->data = 1;
     dl.push_back(node);
     EXPECT_EQ(dl.size(), 1);
     dl.remove(node);
@@ -65,10 +65,10 @@ TEST(DoubleLinkedListTest, TestRemove) {
   }
 
   {
-    DoubleLinkedList dl;
+    DoubleLinkedList<int> dl;
     for (int i = 0; i < 5; i++) {
-      auto node = new TwoWayNode();
-      node->info = i;
+      auto node = new TwoWayNode<int>();
+      node->data = i;
       dl.push_back(node);
       dl.remove(node);
       delete node;
@@ -79,13 +79,13 @@ TEST(DoubleLinkedListTest, TestRemove) {
 }
 
 TEST(DoubleLinkedListTest, TestInsert) {
-  DoubleLinkedList dl;
-  auto already_existed = TwoWayNode{-1, nullptr, nullptr};
+  DoubleLinkedList<int> dl;
+  auto already_existed = TwoWayNode<int>{-1, nullptr, nullptr};
   for (int i = 0; i < 2; i++) {
-    auto node = new TwoWayNode(already_existed);
+    auto node = new TwoWayNode<int>(already_existed);
     dl.push_back(node);
   }
-  auto node = new TwoWayNode();
+  auto node = new TwoWayNode<int>();
   dl.insert(dl.head_node()->next_ptr->next_ptr, node);
   auto inserted = dl.get_index(1);
   EXPECT_EQ(inserted, node);
