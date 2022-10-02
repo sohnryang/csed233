@@ -1,3 +1,5 @@
+#pragma once
+
 template <typename T> struct TwoWayNode {
   T data;
   TwoWayNode *prev_ptr, *next_ptr;

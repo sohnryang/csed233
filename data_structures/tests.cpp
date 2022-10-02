@@ -1,4 +1,5 @@
-#include "double_linked_list.cpp"
+#include <deque.h>
+#include <double_linked_list.h>
 #include <gtest/gtest.h>
 
 TEST(DoubleLinkedListTest, TestInit) {
@@ -89,4 +90,39 @@ TEST(DoubleLinkedListTest, TestInsert) {
   dl.insert(dl.head_node()->next_ptr->next_ptr, node);
   auto inserted = dl.get_index(1);
   EXPECT_EQ(inserted, node);
+}
+
+TEST(DequeTest, TestInit) {
+  Deque<int> dq;
+  EXPECT_TRUE(dq.empty());
+  EXPECT_EQ(dq.size(), 0);
+}
+
+TEST(DequeTest, TestPushPop) {
+  Deque<int> dq;
+  dq.push_back(1);
+  EXPECT_FALSE(dq.empty());
+  EXPECT_EQ(dq.size(), 1);
+  int data = dq.pop_back();
+  EXPECT_EQ(data, 1);
+  EXPECT_TRUE(dq.empty());
+  EXPECT_EQ(dq.size(), 0);
+
+  dq.push_front(2);
+  EXPECT_FALSE(dq.empty());
+  EXPECT_EQ(dq.size(), 1);
+  data = dq.pop_back();
+  EXPECT_EQ(data, 2);
+  EXPECT_TRUE(dq.empty());
+  EXPECT_EQ(dq.size(), 0);
+
+  for (int i = 0; i < 5; i++) {
+    dq.push_back(i);
+    EXPECT_EQ(dq.size(), i + 1);
+  }
+  for (int i = 0; i < 5; i++) {
+    int data = dq.pop_front();
+    EXPECT_EQ(data, i);
+    EXPECT_EQ(dq.size(), 4 - data);
+  }
 }

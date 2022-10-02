@@ -1,6 +1,6 @@
-#include "double_linked_list.cpp"
 #include <cstddef>
 #include <cstdint>
+#include <double_linked_list.h>
 
 enum CommandType {
   PushBack = 0b00,
