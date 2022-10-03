@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 
+#include <deque.h>              // expand: true
 #include <double_linked_list.h> // expand: true
 
 using namespace std;
@@ -185,31 +186,28 @@ void task_4(ofstream &fout, InstructionSequence *instr_seq) {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
 
-  DoubleLinkedList<int> ls;
+  Deque<int> dq;
   bool failed = false;
   for (int i = 0; i < instr_seq->length; i++) {
     string command = instr_seq->instructions[i].command;
     int arg = instr_seq->instructions[i].value;
     if (command.compare("push") == 0) {
-      auto new_node = new TwoWayNode<int>();
-      new_node->data = arg;
-      ls.push_front(new_node);
+      dq.push_back(arg);
     } else if (command.compare("pop") == 0) {
-      if (ls.empty()) {
+      if (dq.empty()) {
         failed = true;
         break;
       }
-      auto top = ls.head_node()->next_ptr;
-      ls.remove(top);
+      dq.pop_back();
     } else if (command.compare("top") == 0) {
       if (!answer.empty())
         answer += " ";
-      if (ls.empty()) {
+      if (dq.empty()) {
         answer += "-1";
         continue;
       }
-      auto top = ls.head_node()->next_ptr;
-      answer += to_string(top->data);
+      auto top = dq.get_back();
+      answer += to_string(top);
     } else {
       cerr << "Invalid command" << endl;
       exit(-1);
@@ -251,27 +249,20 @@ void task_5(ofstream &fout, InstructionSequence *instr_seq) {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
 
-  DoubleLinkedList<int> q;
-  int size = 0;
+  Deque<int> dq;
   bool failed = false;
   for (int i = 0; i < instr_seq->length; i++) {
     string command = instr_seq->instructions[i].command;
     int value = instr_seq->instructions[i].value;
 
     if (command.compare("enqueue") == 0) {
-      auto node = new TwoWayNode<int>();
-      node->data = value;
-      q.push_back(node);
-      size++;
+      dq.push_back(value);
     } else if (command.compare("dequeue") == 0) {
-      if (size == 0) {
+      if (dq.empty()) {
         failed = true;
         break;
       }
-      auto popped = q.head_node()->next_ptr;
-      q.remove(popped);
-      delete popped;
-      size--;
+      dq.pop_front();
     } else {
       cerr << "Invalid command" << endl;
       exit(-1);
@@ -280,15 +271,13 @@ void task_5(ofstream &fout, InstructionSequence *instr_seq) {
 
   if (failed)
     answer = "error";
-  else if (size == 0)
+  else if (dq.empty())
     answer = "empty";
   else {
-    auto node = q.head_node()->next_ptr;
-    for (int i = 0; i < size; ++i) {
-      if (i != 0)
+    while (!dq.empty()) {
+      if (!answer.empty())
         answer += " ";
-      answer += to_string(node->data);
-      node = node->next_ptr;
+      answer += to_string(dq.pop_front());
     }
   }
   ///////////      End of Implementation      /////////////
