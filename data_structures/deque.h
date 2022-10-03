@@ -1,6 +1,6 @@
 #pragma once
 
-#include <double_linked_list.h>
+#include <double_linked_list.h> // expand: true
 
 template <typename T> class Deque {
 private:
