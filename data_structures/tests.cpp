@@ -126,3 +126,20 @@ TEST(DequeTest, TestPushPop) {
     EXPECT_EQ(dq.size(), 4 - data);
   }
 }
+
+TEST(DequeTest, TestGet) {
+  Deque<int> dq;
+  dq.push_back(1);
+  EXPECT_EQ(dq.get_back(), 1);
+  EXPECT_FALSE(dq.empty());
+  EXPECT_EQ(dq.size(), 1);
+  dq.push_front(2);
+  EXPECT_EQ(dq.get_front(), 2);
+  EXPECT_FALSE(dq.empty());
+  EXPECT_EQ(dq.size(), 2);
+  dq.pop_front();
+  EXPECT_EQ(dq.get_front(), dq.get_back());
+  EXPECT_EQ(dq.get_front(), 1);
+  EXPECT_FALSE(dq.empty());
+  EXPECT_EQ(dq.size(), 1);
+}
