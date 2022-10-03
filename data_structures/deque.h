@@ -11,6 +11,8 @@ public:
   Deque();
   int size() const;
   bool empty() const;
+  T get_front() const;
+  T get_back() const;
   T pop_front();
   T pop_back();
   void push_front(T data);
@@ -23,6 +25,14 @@ template <typename T> int Deque<T>::size() const { return this->list_size; }
 
 template <typename T> bool Deque<T>::empty() const {
   return this->internal_list.empty();
+}
+
+template <typename T> T Deque<T>::get_front() const {
+  return this->internal_list.head_node()->next_ptr->data;
+}
+
+template <typename T> T Deque<T>::get_back() const {
+  return this->internal_list.tail_node()->prev_ptr->data;
 }
 
 template <typename T> T Deque<T>::pop_front() {
