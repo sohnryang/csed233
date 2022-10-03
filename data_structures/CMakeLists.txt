@@ -1,4 +1,4 @@
-set(DATA_STRUCTURE_INCLUDE "${PROJECT_SOURCE_DIR}/data_structures")
+set(DATA_STRUCTURE_INCLUDE "${PROJECT_SOURCE_DIR}/data_structures" PARENT_SCOPE)
 
 add_library(DoubleLinkedList INTERFACE)
 target_sources(DoubleLinkedList INTERFACE double_linked_list.h)
@@ -28,3 +28,9 @@ target_include_directories(list_fuzz PRIVATE "${DATA_STRUCTURE_INCLUDE}")
 target_link_libraries(list_fuzz PRIVATE DoubleLinkedList)
 target_compile_options(list_fuzz PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,fuzzer>")
 target_link_options(list_fuzz PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,fuzzer>")
+
+add_executable(deque_fuzz deque_fuzz.cpp)
+target_include_directories(deque_fuzz PRIVATE "${DATA_STRUCTURE_INCLUDE}")
+target_link_libraries(deque_fuzz PRIVATE Deque)
+target_compile_options(deque_fuzz PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,fuzzer>")
+target_link_options(deque_fuzz PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,fuzzer>")
