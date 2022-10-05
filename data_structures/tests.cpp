@@ -1,6 +1,10 @@
+#include <bitmask.h>
+#include <cmath>
 #include <deque.h>
 #include <double_linked_list.h>
 #include <gtest/gtest.h>
+#include <priority_queue.h>
+#include <utility>
 
 TEST(DoubleLinkedListTest, TestInit) {
   DoubleLinkedList<int> dl;
@@ -142,4 +146,71 @@ TEST(DequeTest, TestGet) {
   EXPECT_EQ(dq.get_front(), 1);
   EXPECT_FALSE(dq.empty());
   EXPECT_EQ(dq.size(), 1);
+}
+
+TEST(BitmaskTest, TestLog2Floor) {
+  EXPECT_EQ(log2_floor<int>(-1), -1);
+  EXPECT_EQ(log2_floor<int>(0), -1);
+  int values[] = {
+      1, 2, 3, 4, 5, 7, 8, 9, 15, 16, 17,
+  };
+  for (auto v : values)
+    EXPECT_EQ(log2_floor(v), (int)log2(v));
+}
+
+TEST(PriorityQueueTest, TestInit) {
+  {
+    PriorityQueue<int> pq;
+    EXPECT_TRUE(pq.empty());
+    EXPECT_EQ(pq.size(), 0);
+  }
+  {
+    int arr[7] = {6, 5, 3, 2, 7, 1, 4};
+    PriorityQueue<int> pq(arr, 7);
+    EXPECT_EQ(pq.size(), 7);
+    for (int i = 1; i <= 7; i++)
+      EXPECT_EQ(pq.remove(), i);
+    EXPECT_TRUE(pq.empty());
+  }
+  {
+    int arr[7] = {0};
+    PriorityQueue<int> pq(arr, 7);
+    EXPECT_EQ(pq.size(), 7);
+    for (int i = 1; i <= 7; i++)
+      EXPECT_EQ(pq.remove(), 0);
+    EXPECT_TRUE(pq.empty());
+  }
+}
+
+TEST(PriorityQueueTest, TestInsert) {
+  PriorityQueue<int> pq(2);
+  pq.insert(2);
+  pq.insert(1);
+  pq.insert(3);
+  auto arr = pq.get_internal_array();
+  EXPECT_EQ(arr[1], 1);
+  EXPECT_EQ(arr[2], 2);
+  EXPECT_EQ(arr[3], 3);
+  EXPECT_FALSE(pq.empty());
+  EXPECT_EQ(pq.size(), 3);
+}
+
+TEST(PriorityQueueTest, TestRemove) {
+  {
+    PriorityQueue<int> pq(2);
+    pq.insert(2);
+    pq.insert(1);
+    pq.insert(3);
+    for (int i = 1; i <= 3; i++) {
+      EXPECT_EQ(pq.remove(), i);
+      EXPECT_EQ(pq.size(), 3 - i);
+    }
+    EXPECT_TRUE(pq.empty());
+  }
+  {
+    PriorityQueue<int> pq(1);
+    pq.insert(1);
+    EXPECT_EQ(pq.remove(), 1);
+    EXPECT_TRUE(pq.empty());
+  }
 }
