@@ -12,6 +12,14 @@ add_library(KAryTree INTERFACE)
 target_sources(KAryTree INTERFACE kary_tree.h)
 target_include_directories(KAryTree INTERFACE "${DATA_STRUCTURE_INCLUDE}")
 
+add_library(Bitmask INTERFACE)
+target_sources(Bitmask INTERFACE bitmask.h)
+target_include_directories(Bitmask INTERFACE "${DATA_STRUCTURE_INCLUDE}")
+
+add_library(PriorityQueue INTERFACE)
+target_sources(PriorityQueue INTERFACE priority_queue.h)
+target_include_directories(PriorityQueue INTERFACE "${DATA_STRUCTURE_INCLUDE}")
+
 enable_testing()
 add_compile_options("$<$<CONFIG:DEBUG>:-fno-omit-frame-pointer>")
 add_compile_options("$<$<CONFIG:DEBUG>:-fsanitize=address>")
