@@ -213,4 +213,16 @@ TEST(PriorityQueueTest, TestRemove) {
     EXPECT_EQ(pq.remove(), 1);
     EXPECT_TRUE(pq.empty());
   }
+  {
+    PriorityQueue<int> pq(2);
+    pq.insert(2);
+    pq.insert(1);
+    pq.insert(3);
+    pq.insert(4);
+    for (int i = 1; i <= 4; i++) {
+      EXPECT_EQ(pq.remove(), i);
+      EXPECT_EQ(pq.size(), 4 - i);
+    }
+    EXPECT_TRUE(pq.empty());
+  }
 }
