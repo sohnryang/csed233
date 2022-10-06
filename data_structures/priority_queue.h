@@ -13,13 +13,13 @@ template <typename T> void swap(T &a, T &b) {
 template <typename T> class PriorityQueue {
 private:
   T *internal_arr;
-  size_t height, node_count;
+  size_t height, node_count, capacity;
   void normalize_subtree(size_t root);
 
 public:
   PriorityQueue<T>(size_t height);
   PriorityQueue<T>();
-  PriorityQueue<T>(T *arr, size_t node_count);
+  PriorityQueue<T>(const T *arr, size_t node_count);
   ~PriorityQueue<T>();
   T *get_internal_array() const;
   bool empty() const;
@@ -50,22 +50,25 @@ template <typename T> void PriorityQueue<T>::normalize_subtree(size_t root) {
 }
 
 template <typename T>
-PriorityQueue<T>::PriorityQueue(size_t height) : height(height), node_count(0) {
-  internal_arr = new T[1 << height];
+PriorityQueue<T>::PriorityQueue(size_t height)
+    : height(height), node_count(0), capacity(1 << height) {
+  internal_arr = new T[capacity];
 }
 
 template <typename T> PriorityQueue<T>::PriorityQueue() : PriorityQueue<T>(1) {}
 
 template <typename T>
-PriorityQueue<T>::PriorityQueue(T *arr, size_t node_count)
+PriorityQueue<T>::PriorityQueue(const T *arr, size_t node_count)
     : node_count(node_count) {
   if (node_count == 0) {
     height = 1;
-    internal_arr = new T[1 << height];
+    capacity = 1 << height;
+    internal_arr = new T[capacity];
     return;
   }
   height = log2_floor<size_t>(node_count) + 1;
-  internal_arr = new T[1 << height];
+  capacity = 1 << height;
+  internal_arr = new T[capacity];
   for (size_t i = 1; i <= node_count; i++)
     internal_arr[i] = arr[i - 1];
   for (size_t k = node_count / 2; k >= 1; k--)
@@ -89,7 +92,14 @@ template <typename T> size_t PriorityQueue<T>::size() const {
 }
 
 template <typename T> void PriorityQueue<T>::insert(T element) {
-  // TODO: reallocate array if full
+  if (capacity == node_count + 1) {
+    capacity *= 2;
+    T *new_arr = new T[capacity];
+    for (int i = 1; i <= node_count; i++)
+      new_arr[i] = internal_arr[i];
+    delete[] internal_arr;
+    internal_arr = new_arr;
+  }
   internal_arr[node_count + 1] = element;
   size_t current_index = ++node_count;
   while (current_index != 1) {
