@@ -182,7 +182,19 @@ string BinaryTree::isProper() {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
 
-  return "False";
+  Deque<Node *> stack;
+  stack.push_back(_root);
+  while (!stack.empty()) {
+    auto here = stack.pop_back();
+    if (here == nullptr)
+      continue;
+    if ((here->left != nullptr && here->right == nullptr) ||
+        (here->left == nullptr && here->right != nullptr))
+      return "False";
+    stack.push_back(here->left);
+    stack.push_back(here->right);
+  }
+  return "True";
 
   ///////////      End of Implementation      /////////////
   /////////////////////////////////////////////////////////
@@ -192,7 +204,30 @@ string BinaryTree::isFull() {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
 
-  return "False";
+  Deque<Node *> stack;
+  Deque<int> depth_stack;
+  stack.push_back(_root);
+  depth_stack.push_back(0);
+  int max_depth = -1;
+  while (!stack.empty()) {
+    auto here = stack.pop_back();
+    auto here_depth = depth_stack.pop_back();
+    if (here == nullptr)
+      continue;
+    if ((here->left != nullptr && here->right == nullptr) ||
+        (here->left == nullptr && here->right != nullptr))
+      return "False";
+    if (here->left == nullptr && here->right == nullptr) {
+      if (max_depth != -1 && max_depth != here_depth)
+        return "False";
+      max_depth = here_depth;
+    }
+    stack.push_back(here->left);
+    stack.push_back(here->right);
+    depth_stack.push_back(here_depth + 1);
+    depth_stack.push_back(here_depth + 1);
+  }
+  return "True";
 
   ///////////      End of Implementation      /////////////
   /////////////////////////////////////////////////////////
@@ -202,7 +237,45 @@ string BinaryTree::isComplete() {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
 
-  return "False";
+  Deque<Node *> stack;
+  stack.push_back(_root);
+  Deque<int> depth_stack;
+  depth_stack.push_back(0);
+  int max_depth = -1;
+  Deque<Node *> leaves;
+  while (!stack.empty()) {
+    auto here = stack.pop_back();
+    auto here_depth = depth_stack.pop_back();
+    if (here_depth == max_depth)
+      leaves.push_back(here);
+    if (here == nullptr)
+      continue;
+    if (max_depth == -1 && here->left == nullptr) {
+      max_depth = here_depth;
+      leaves.push_back(here);
+    }
+
+    stack.push_back(here->right);
+    stack.push_back(here->left);
+    depth_stack.push_back(here_depth + 1);
+    depth_stack.push_back(here_depth + 1);
+
+    if (max_depth == -1)
+      continue;
+    if (here_depth > max_depth)
+      return "False";
+  }
+  if (leaves.size() != (1 << max_depth))
+    return "False";
+  bool null_appeared = false;
+  for (int i = 0; i < leaves.size(); i++) {
+    auto leaf = leaves.pop_front();
+    if (leaf == nullptr)
+      null_appeared = true;
+    if (leaf != nullptr && null_appeared)
+      return "False";
+  }
+  return "True";
 
   ///////////      End of Implementation      /////////////
   /////////////////////////////////////////////////////////
