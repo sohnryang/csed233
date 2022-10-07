@@ -1,4 +1,6 @@
 add_executable(pa2 pa2.cpp utils.cpp heap.cpp tree.cpp)
 target_include_directories(pa2 PRIVATE "${DATA_STRUCTURE_INCLUDE}")
 target_link_libraries(pa2 PRIVATE PriorityQueue PRIVATE Deque)
+target_compile_options(pa2 PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,leak>")
+target_link_options(pa2 PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,leak>")
 add_executable(pa2_eval evaluate.cpp)
