@@ -62,7 +62,28 @@ string BinaryTree::getDepthHeight(int node_value) {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
 
-  return "";
+  Deque<Node *> stack;
+  Deque<int> depth_stack;
+  int node_depth = -1, max_depth = 0;
+  stack.push_back(_root);
+  depth_stack.push_back(0);
+  while (!stack.empty()) {
+    auto here = stack.pop_back();
+    auto here_depth = depth_stack.pop_back();
+    if (here == nullptr)
+      continue;
+    if (here->value - '0' == node_value)
+      node_depth = here_depth;
+    if (here_depth > max_depth)
+      max_depth = here_depth;
+    stack.push_back(here->left);
+    depth_stack.push_back(here_depth + 1);
+    stack.push_back(here->right);
+    depth_stack.push_back(here_depth + 1);
+  }
+  if (node_depth == -1)
+    return "error";
+  return to_string(node_depth) + " " + to_string(max_depth - node_depth);
 
   ///////////      End of Implementation      /////////////
   /////////////////////////////////////////////////////////
