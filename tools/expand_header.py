@@ -34,7 +34,7 @@ if __name__ == "__main__":
                     break
 
                 pragma_match = re.match(pragma_pattern, line)
-                if pragma_match is not None:
+                if pragma_match is not None and f != file_stack[0]:
                     out_file.write("// ")
 
                 regex_match = re.match(expand_include_pattern, line)
