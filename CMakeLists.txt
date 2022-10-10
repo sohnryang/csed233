@@ -16,6 +16,6 @@ FetchContent_MakeAvailable(googletest)
 
 set(TOOLS_DIR "${PROJECT_SOURCE_DIR}/tools")
 
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 add_subdirectory(data_structures)
 add_subdirectory(assignments)
