@@ -36,7 +36,7 @@ using namespace std;
 void task_1(ofstream &fout, const char *quiz_num) {
   fout << "[Task 1]" << endl;
   int answer_1_1 = 3; // TODO: Change to your answer
-  int answer_1_2 = 3; // TODO: Change to your answer
+  int answer_1_2 = 7; // TODO: Change to your answer
 
   if (!strcmp(quiz_num, "1")) {
     fout << answer_1_1 << endl;
