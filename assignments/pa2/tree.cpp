@@ -268,7 +268,7 @@ string BinaryTree::isComplete() {
   if (leaves.size() != (1 << max_depth))
     return "False";
   bool null_appeared = false;
-  for (int i = 0; i < leaves.size(); i++) {
+  while (!leaves.empty()) {
     auto leaf = leaves.pop_front();
     if (leaf == nullptr)
       null_appeared = true;
