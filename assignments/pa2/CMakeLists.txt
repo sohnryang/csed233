@@ -41,3 +41,13 @@ pa2_test(6 "\"[('insert',5),('insert',-3),('insert',22),('delMin',NULL)]\"" "5 2
 pa2_test(6 "\"[('insert',28),('insert',9),('insert',27),('insert',10),('insert',3),('insert',45),('delMin',NULL)]\"" "9 10 27 28 45")
 pa2_test(6 "\"[('insert',28),('insert',9),('insert',27),('insert',10),('insert',3),('insert',45),('delMin',NULL),('insert',22)]\"" "9 10 22 28 45 27")
 pa2_test(6 "\"[('insert',3),('insert',7),('insert',6),('insert',25),('delMin',NULL),('insert',12),('delete', 2),('insert',-1),('delMin',NULL)]\"" "6 7 12")
+
+pa2_test(2 "\"0(0)(0)\" \"preorder\"" "0 0 0")
+pa2_test(4 "\"1(2(4)(5))(3()(7))\" \"complete\"" "False")
+pa2_test(4 "\"1\" \"full\"" "True")
+pa2_test(4 "\"1\" \"complete\"" "True")
+pa2_test(4 "\"1(2)\" \"complete\"" "True")
+pa2_test(4 "\"1(2)\" \"full\"" "False")
+pa2_test(4 "\"1()(2)\" \"complete\"" "False")
+pa2_test(4 "\"1()(2)\" \"full\"" "False")
+pa2_test(6 "\"[('insert',3),('insert',7),('insert',6),('insert',25),('delMin',NULL),('insert',12),('delete', 2),('insert',-1),('delMin',NULL),('delMin',NULL)]\"" "7 12")
