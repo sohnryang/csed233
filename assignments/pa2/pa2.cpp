@@ -27,10 +27,10 @@ using namespace std;
 
     1-2.  What is the time complexity of rearranging min-heap into max-heap?
 
-          (1) O(1)
-          (2) O(log n)
-          (3) O(n)
-          (4) O(2^n)
+          (5) O(1)
+          (6) O(log n)
+          (7) O(n)
+          (8) O(2^n)
 
 */
 void task_1(ofstream &fout, const char *quiz_num) {
