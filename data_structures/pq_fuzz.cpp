@@ -16,28 +16,30 @@ int fuzz(const uint8_t *data, size_t size) {
   }
   PriorityQueue<uint8_t> pq(init_data, init_data_len);
   if (pq.size() != init_data_len)
-    return -1;
+    return 1;
   for (size_t i = 0; i < init_data_len; i++) {
     if (pq.remove() != pq_std.top())
-      return -1;
+      return 1;
     pq_std.pop();
   }
   if (!pq.empty())
-    return -1;
+    return 1;
   for (size_t i = init_data_len; i < size; i++) {
     pq_std.push(data[i]);
     pq.insert(data[i]);
   }
   for (size_t i = init_data_len; i < size; i++) {
     if (pq.remove() != pq_std.top())
-      return -1;
+      return 1;
     pq_std.pop();
   }
   if (!pq.empty())
-    return -1;
+    return 1;
   return 0;
 }
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
-  return fuzz(Data, Size);
+  if (fuzz(Data, Size))
+    __builtin_trap();
+  return 0;
 }

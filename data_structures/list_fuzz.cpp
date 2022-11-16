@@ -61,5 +61,7 @@ int fuzz(const uint8_t *data, size_t size) {
 }
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
-  return fuzz(Data, Size);
+  if (fuzz(Data, Size))
+    __builtin_trap();
+  return 0;
 }
