@@ -24,6 +24,7 @@ public:
   T *get_internal_array() const;
   bool empty() const;
   size_t size() const;
+  T minimum() const;
   void insert(T element);
   T remove();
 };
@@ -89,6 +90,10 @@ template <typename T> bool PriorityQueue<T>::empty() const {
 
 template <typename T> size_t PriorityQueue<T>::size() const {
   return node_count;
+}
+
+template <typename T> T PriorityQueue<T>::minimum() const {
+  return internal_arr[1];
 }
 
 template <typename T> void PriorityQueue<T>::insert(T element) {
