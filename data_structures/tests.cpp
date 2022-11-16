@@ -1,4 +1,5 @@
 #include <bitmask.h>
+#include <bst.h>
 #include <cmath>
 #include <deque.h>
 #include <double_linked_list.h>
@@ -225,4 +226,62 @@ TEST(PriorityQueueTest, TestRemove) {
     }
     EXPECT_TRUE(pq.empty());
   }
+}
+
+TEST(BSTTest, TestGet) {
+  {
+    BST<int, int> tree;
+    EXPECT_EQ(tree.get(0), nullptr);
+  }
+  {
+    auto root = new BSTNode<int, int>();
+    root->key = 3;
+    root->value = 3;
+    auto left_node = new BSTNode<int, int>();
+    left_node->key = 2;
+    left_node->value = 2;
+    auto right_node = new BSTNode<int, int>();
+    right_node->key = 4;
+    right_node->value = 4;
+
+    root->left = left_node;
+    root->right = right_node;
+
+    auto left_left_node = new BSTNode<int, int>();
+    left_left_node->key = 1;
+    left_left_node->value = 1;
+
+    left_node->left = left_left_node;
+
+    BST<int, int> tree(root);
+    EXPECT_EQ(tree.get_root(), root);
+    EXPECT_EQ(tree.get(2), left_node);
+    EXPECT_EQ(tree.get(4), right_node);
+    EXPECT_EQ(tree.get(1), left_left_node);
+    EXPECT_EQ(tree.get(0), nullptr);
+  }
+}
+
+TEST(BSTTest, TestInsert) {
+  BST<int, int> tree;
+  tree.insert(3, 3);
+  tree.insert(2, 2);
+  tree.insert(4, 4);
+
+  auto root = tree.get_root();
+  EXPECT_EQ(root->key, 3);
+  EXPECT_EQ(root->left, tree.get(2));
+  EXPECT_EQ(root->right, tree.get(4));
+}
+
+TEST(BSTTest, TestRemove) {
+  BST<int, int> tree;
+  tree.insert(3, 3);
+  tree.insert(2, 2);
+  tree.insert(4, 4);
+
+  tree.remove(3);
+  EXPECT_EQ(tree.get(3), nullptr);
+  tree.remove(2);
+  EXPECT_EQ(tree.get(2), nullptr);
 }

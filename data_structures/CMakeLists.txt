@@ -31,7 +31,7 @@ add_link_options("$<$<CONFIG:DEBUG>:-fsanitize=address>")
 
 add_executable(tests tests.cpp)
 target_include_directories(tests PRIVATE "${DATA_STRUCTURE_INCLUDE}")
-target_link_libraries(tests PRIVATE GTest::gtest_main PRIVATE DoubleLinkedList PRIVATE Deque PRIVATE PriorityQueue PRIVATE Bitmask)
+target_link_libraries(tests PRIVATE GTest::gtest_main PRIVATE DoubleLinkedList PRIVATE Deque PRIVATE PriorityQueue PRIVATE Bitmask PRIVATE BST)
 target_compile_options(tests PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,leak>")
 target_link_options(tests PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,leak>")
 include(GoogleTest)
