@@ -1,6 +1,8 @@
 #include <bitmask.h>
 #include <bst.h>
 #include <cmath>
+#include <cstddef>
+#include <cstdint>
 #include <deque.h>
 #include <double_linked_list.h>
 #include <gtest/gtest.h>
@@ -284,4 +286,25 @@ TEST(BSTTest, TestRemove) {
   EXPECT_EQ(tree.get(3), nullptr);
   tree.remove(2);
   EXPECT_EQ(tree.get(2), nullptr);
+}
+
+TEST(BSTTest, TestFuzzRegression) {
+  uint8_t data[] = {0xa5, 0xf7, 0x60, 0xee, 0x5a, 0xdf};
+  size_t size = sizeof(data) / sizeof(data[0]);
+  BST<uint8_t, int> tree;
+  for (size_t i = 0; i < size; i++) {
+    auto node = tree.get(data[i]);
+    if (node == nullptr) {
+      tree.insert(data[i], 0);
+      node = tree.get(data[i]);
+    }
+    node->value++;
+  }
+  for (size_t i = 0; i < size; i++) {
+    auto node = tree.get(data[i]);
+    node->value--;
+    if (node->value == 0)
+      tree.remove(data[i]);
+  }
+  EXPECT_EQ(tree.get_root(), nullptr);
 }
