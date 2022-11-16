@@ -20,6 +20,10 @@ add_library(PriorityQueue INTERFACE)
 target_sources(PriorityQueue INTERFACE priority_queue.h)
 target_include_directories(PriorityQueue INTERFACE "${DATA_STRUCTURE_INCLUDE}")
 
+add_library(BST INTERFACE)
+target_sources(BST INTERFACE bst.h)
+target_include_directories(BST INTERFACE "${DATA_STRUCTURE_INCLUDE}")
+
 enable_testing()
 add_compile_options("$<$<CONFIG:DEBUG>:-fno-omit-frame-pointer>")
 add_compile_options("$<$<CONFIG:DEBUG>:-fsanitize=address>")
