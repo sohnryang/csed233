@@ -14,11 +14,6 @@ add_custom_target(pa2_src ALL
   COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA2_SRC_DIR}/tree.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/tree.cpp"
 )
 
-function(pa2_test task input result)
-  add_test(NAME "Task${task}.Input[${input}]" COMMAND bash -c "cd ${CMAKE_BINARY_DIR} && rm submit.txt 2>&1 > /dev/null; ./pa2 ${task} ${input} && cat submit.txt")
-  set_tests_properties("Task${task}.Input[${input}]" PROPERTIES PASS_REGULAR_EXPRESSION "${result}")
-endfunction()
-
 pa_test(pa2 2 "\"1(2)(3)\" \"preorder\"" "1 2 3")
 pa_test(pa2 2 "\"1(2()(4))(3()(5))\" \"postorder\"" "4 2 5 3 1")
 pa_test(pa2 2 "\"4(2(3)(1))(6(5))\" \"preorder\"" "4 2 3 1 6 5")
