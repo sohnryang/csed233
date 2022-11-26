@@ -2,7 +2,7 @@
 
 #include <cstddef>
 
-#include <bitmask.h> //expand: true
+#include <utils.h> //expand: true
 
 template <typename T> void swap(T &a, T &b) {
   T tmp = a;

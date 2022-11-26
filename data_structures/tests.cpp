@@ -1,5 +1,4 @@
 #include <avl.h>
-#include <bitmask.h>
 #include <bst.h>
 #include <cmath>
 #include <cstddef>
@@ -10,6 +9,7 @@
 #include <priority_queue.h>
 #include <sorting.h>
 #include <utility>
+#include <utils.h>
 
 TEST(DoubleLinkedListTest, TestInit) {
   DoubleLinkedList<int> dl;
