@@ -135,15 +135,18 @@ template <typename K, typename V> void AVLTree<K, V>::insert(K key, V value) {
     return;
   }
   Deque<AVLNode<K, V> *> parents;
+  Deque<bool> left_child;
   while (true) {
     parents.push_back(parent);
     if (key < parent->key) {
+      left_child.push_back(true);
       if (parent->left == nullptr) {
         parent->left = node;
         break;
       }
       parent = parent->left;
     } else if (key > parent->key) {
+      left_child.push_back(false);
       if (parent->right == nullptr) {
         parent->right = node;
         break;
@@ -152,28 +155,26 @@ template <typename K, typename V> void AVLTree<K, V>::insert(K key, V value) {
     }
   }
   AVLNode<K, V> *current_node;
+  int child_bf = 0;
   while (!parents.empty()) {
     current_node = parents.pop_back();
-    int left_height = -1;
-    if (current_node->left != nullptr)
-      left_height = current_node->left->height;
-    int right_height = -1;
-    if (current_node->right != nullptr)
-      right_height = current_node->right->height;
+    bool is_left = left_child.pop_back();
+    int left_height = safe_height(current_node->left),
+        right_height = safe_height(current_node->right);
     current_node->height = 1 + max(left_height, right_height);
-    int bf = left_height - right_height;
-    if (abs(bf) > 1) {
-      if (key < current_node->key) {
-        if (key < current_node->left->key)
+    if (abs(current_node->balancing_factor()) > 1) {
+      if (is_left) {
+        if (child_bf >= 0)
           ll_rotate(current_node);
         else
           lr_rotate(current_node);
       } else {
-        if (key < current_node->right->key)
-          rl_rotate(current_node);
-        else
+        if (child_bf <= 0)
           rr_rotate(current_node);
+        else
+          rl_rotate(current_node);
       }
     }
+    child_bf = current_node->balancing_factor();
   }
 }
