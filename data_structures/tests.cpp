@@ -394,10 +394,10 @@ TEST(AVLTreeTest, TestRotate) {
 
   AVLTree<int, int> tree(root);
   tree.ll_rotate(root);
-  EXPECT_EQ(tree.get_root()->value, 2);
-  EXPECT_EQ(tree.get_root()->left->value, 1);
-  EXPECT_EQ(tree.get_root()->right->value, 3);
-  EXPECT_EQ(tree.get_root()->right->right->value, 4);
+  EXPECT_EQ(tree.get_root()->key, 2);
+  EXPECT_EQ(tree.get_root()->left->key, 1);
+  EXPECT_EQ(tree.get_root()->right->key, 3);
+  EXPECT_EQ(tree.get_root()->right->right->key, 4);
   EXPECT_EQ(tree.get_root()->height, 2);
   EXPECT_EQ(tree.get_root()->left->height, 0);
   EXPECT_EQ(tree.get_root()->right->height, 1);
