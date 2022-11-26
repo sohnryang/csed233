@@ -7,6 +7,7 @@
 #include <double_linked_list.h>
 #include <gtest/gtest.h>
 #include <priority_queue.h>
+#include <sorting.h>
 #include <utility>
 
 TEST(DoubleLinkedListTest, TestInit) {
@@ -307,4 +308,29 @@ TEST(BSTTest, TestFuzzRegression) {
       tree.remove(data[i]);
   }
   EXPECT_EQ(tree.get_root(), nullptr);
+}
+
+TEST(SortingTest, TestPartition) {
+  int pivots[] = {17, 1, 1, 1};
+  int arrs[][5] = {{0, 20, 2, 21, 4}, {0}, {0, 0}, {0, 2}};
+  int lengths[] = {5, 1, 2, 2};
+  for (int i = 0; i < 4; i++) {
+    arrs[i][0] = pivots[i];
+    int len = lengths[i];
+    int pivot_pos = partition(arrs[i], 0, len - 1);
+    EXPECT_EQ(pivots[i], arrs[i][pivot_pos]);
+    for (int j = 0; j < len; j++) {
+      if (j <= pivot_pos)
+        EXPECT_TRUE(arrs[i][j] <= pivots[i]);
+      else
+        EXPECT_TRUE(arrs[i][j] > pivots[i]);
+    }
+  }
+}
+
+TEST(SortingTest, TestMerge) {
+  int arr[] = {17, 20, 2, 21, 4};
+  merge_sort(arr, 0, 4);
+  for (int i = 1; i < 5; i++)
+    EXPECT_TRUE(arr[i - 1] <= arr[i]);
 }
