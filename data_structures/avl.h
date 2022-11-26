@@ -135,18 +135,18 @@ template <typename K, typename V> void AVLTree<K, V>::insert(K key, V value) {
     return;
   }
   Deque<AVLNode<K, V> *> parents;
-  Deque<bool> left_child;
+  Deque<bool> child_dir;
   while (true) {
     parents.push_back(parent);
     if (key < parent->key) {
-      left_child.push_back(true);
+      child_dir.push_back(true);
       if (parent->left == nullptr) {
         parent->left = node;
         break;
       }
       parent = parent->left;
     } else if (key > parent->key) {
-      left_child.push_back(false);
+      child_dir.push_back(false);
       if (parent->right == nullptr) {
         parent->right = node;
         break;
@@ -158,7 +158,7 @@ template <typename K, typename V> void AVLTree<K, V>::insert(K key, V value) {
   while (!parents.empty()) {
     AVLNode<K, V> *current;
     current = parents.pop_back();
-    bool is_left = left_child.pop_back();
+    bool is_left = child_dir.pop_back();
     int left_height = safe_height(current->left),
         right_height = safe_height(current->right);
     current->height = 1 + max(left_height, right_height);
