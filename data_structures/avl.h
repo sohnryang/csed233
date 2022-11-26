@@ -178,3 +178,91 @@ template <typename K, typename V> void AVLTree<K, V>::insert(K key, V value) {
     child_bf = current->balancing_factor();
   }
 }
+
+template <typename K, typename V> void AVLTree<K, V>::remove(K key) {
+  AVLNode<K, V> *node = root, *parent = nullptr, *new_node;
+  bool left_child;
+  Deque<AVLNode<K, V> *> parents;
+  Deque<bool> child_dir;
+  while (node->key != key) {
+    parent = node;
+    parents.push_back(parent);
+    if (key < node->key) {
+      node = node->left;
+      child_dir.push_back(true);
+      left_child = true;
+    } else {
+      node = node->right;
+      child_dir.push_back(false);
+      left_child = false;
+    }
+  }
+  if (node->left == nullptr && node->right == nullptr) {
+    new_node = nullptr;
+  } else if (node->left != nullptr && node->right != nullptr) {
+    Deque<AVLNode<K, V> *> subtree_parents;
+    Deque<bool> subtree_child_dir;
+    subtree_child_dir.push_back(false);
+    auto right_root = node->right;
+    new_node = right_root;
+    AVLNode<K, V> *new_node_parent = nullptr;
+    while (new_node->left != nullptr) {
+      subtree_parents.push_back(new_node);
+      subtree_child_dir.push_back(true);
+      new_node_parent = new_node;
+      new_node = new_node->left;
+    }
+    subtree_parents.push_front(new_node);
+    while (!subtree_parents.empty()) {
+      parents.push_back(subtree_parents.pop_front());
+      child_dir.push_back(subtree_child_dir.pop_front());
+    }
+    if (new_node_parent != nullptr)
+      new_node_parent->left = new_node->right;
+    new_node->left = node->left;
+    if (new_node != right_root)
+      new_node->right = right_root;
+  } else
+    new_node = node->left != nullptr ? node->left : node->right;
+  if (parent == nullptr)
+    root = new_node;
+  else if (left_child)
+    parent->left = new_node;
+  else
+    parent->right = new_node;
+  int child_bf = 0;
+  bool first = true;
+  while (!parents.empty()) {
+    AVLNode<K, V> *current;
+    current = parents.pop_back();
+    bool is_left = child_dir.pop_back();
+    int left_height = safe_height(current->left),
+        right_height = safe_height(current->right);
+    current->height = 1 + max(left_height, right_height);
+    if (abs(current->balancing_factor()) > 1) {
+      if (first) {
+        if (current->left != nullptr && current->right != nullptr)
+          ll_rotate(current);
+        else if (current->left == nullptr)
+          rr_rotate(current);
+        else
+          ll_rotate(current);
+        first = false;
+      } else {
+        if (is_left) {
+          if (child_bf >= 0)
+            ll_rotate(current);
+          else
+            lr_rotate(current);
+        } else {
+          if (child_bf <= 0)
+            rr_rotate(current);
+          else
+            rl_rotate(current);
+        }
+      }
+    }
+    child_bf = current->balancing_factor();
+  }
+  delete node;
+}
