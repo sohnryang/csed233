@@ -8,3 +8,9 @@ template <typename T> int log2_floor(T x) {
       return shift - 1;
   return sizeof(T) * 8;
 }
+
+template <typename T> void swap(T &x, T &y) {
+  T tmp = x;
+  x = y;
+  y = tmp;
+}

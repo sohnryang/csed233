@@ -4,12 +4,6 @@
 
 #include <utils.h> //expand: true
 
-template <typename T> void swap(T &a, T &b) {
-  T tmp = a;
-  a = b;
-  b = tmp;
-}
-
 template <typename T> class PriorityQueue {
 private:
   T *internal_arr;
