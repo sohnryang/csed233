@@ -403,3 +403,33 @@ TEST(AVLTreeTest, TestRotate) {
   EXPECT_EQ(tree.get_root()->right->height, 1);
   EXPECT_EQ(tree.get_root()->right->right->height, 0);
 }
+
+TEST(AVLTreeTest, TestInsert) {
+  AVLTree<int, int> tree;
+  tree.insert(3, 3);
+  tree.insert(2, 2);
+  tree.insert(1, 1);
+  tree.insert(4, 4);
+  tree.insert(5, 5);
+  tree.insert(6, 6);
+  tree.insert(7, 7);
+  EXPECT_EQ(tree.get_root()->key, 4);
+  EXPECT_EQ(tree.get_root()->left->key, 2);
+  EXPECT_EQ(tree.get_root()->right->key, 6);
+  EXPECT_EQ(tree.get_root()->left->left->key, 1);
+  EXPECT_EQ(tree.get_root()->left->right->key, 3);
+  EXPECT_EQ(tree.get_root()->right->left->key, 5);
+  EXPECT_EQ(tree.get_root()->right->right->key, 7);
+  EXPECT_EQ(tree.get_root()->height, 2);
+  EXPECT_EQ(tree.get_root()->left->height, 1);
+  EXPECT_EQ(tree.get_root()->right->height, 1);
+  EXPECT_EQ(tree.get_root()->left->left->height, 0);
+  EXPECT_EQ(tree.get_root()->left->right->height, 0);
+  EXPECT_EQ(tree.get_root()->right->left->height, 0);
+  EXPECT_EQ(tree.get_root()->right->right->height, 0);
+  tree.insert(16, 16);
+  tree.insert(15, 15);
+  EXPECT_EQ(tree.get_root()->right->right->key, 15);
+  EXPECT_EQ(tree.get_root()->right->right->left->key, 7);
+  EXPECT_EQ(tree.get_root()->right->right->right->key, 16);
+}
