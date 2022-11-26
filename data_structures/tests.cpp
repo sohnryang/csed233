@@ -1,3 +1,4 @@
+#include <avl.h>
 #include <bitmask.h>
 #include <bst.h>
 #include <cmath>
@@ -333,4 +334,39 @@ TEST(SortingTest, TestMerge) {
   merge_sort(arr, 0, 4);
   for (int i = 1; i < 5; i++)
     EXPECT_TRUE(arr[i - 1] <= arr[i]);
+}
+
+TEST(AVLTreeTest, TestGet) {
+  auto root = new AVLNode<int, int>();
+  root->key = 3;
+  root->value = 3;
+  root->height = 2;
+  auto left_node = new AVLNode<int, int>();
+  left_node->key = 2;
+  left_node->value = 2;
+  left_node->height = 1;
+  auto right_node = new AVLNode<int, int>();
+  right_node->key = 4;
+  right_node->value = 4;
+  right_node->height = 0;
+
+  root->left = left_node;
+  root->right = right_node;
+  left_node->parent = root;
+  right_node->parent = root;
+
+  auto left_left_node = new AVLNode<int, int>();
+  left_left_node->key = 1;
+  left_left_node->value = 1;
+  left_left_node->height = 0;
+
+  left_node->left = left_left_node;
+  left_left_node->parent = left_node;
+
+  AVLTree<int, int> tree(root);
+  EXPECT_EQ(tree.get_root(), root);
+  EXPECT_EQ(tree.get(2), left_node);
+  EXPECT_EQ(tree.get(4), right_node);
+  EXPECT_EQ(tree.get(1), left_left_node);
+  EXPECT_EQ(tree.get(0), nullptr);
 }
