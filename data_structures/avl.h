@@ -90,15 +90,9 @@ void AVLTree<K, V>::ll_rotate(AVLNode<K, V> *node) {
   swap(node->left->left, node->right);
   swap(node->left->left, node->left->right);
   swap(node->left, node->right);
-  int left_left_height = -1;
-  if (left_left_child != nullptr)
-    left_left_height = left_left_child->height;
-  int left_right_height = -1;
-  if (left_right_child != nullptr)
-    left_right_height = left_right_child->height;
-  int right_height = -1;
-  if (right_child != nullptr)
-    right_height = right_child->height;
+  int left_left_height = safe_height(left_left_child),
+      left_right_height = safe_height(left_right_child),
+      right_height = safe_height(right_child);
   node->right->height = 1 + max(left_right_height, right_height);
   node->height = 1 + max(node->right->height, left_left_height);
 }
@@ -112,15 +106,9 @@ void AVLTree<K, V>::rr_rotate(AVLNode<K, V> *node) {
   swap(node->right->right, node->left);
   swap(node->right->left, node->right->right);
   swap(node->left, node->right);
-  int left_height = -1;
-  if (left_child != nullptr)
-    left_height = left_child->height;
-  int right_left_height = -1;
-  if (right_left_child != nullptr)
-    right_left_height = right_left_child->height;
-  int right_right_height = -1;
-  if (right_right_child != nullptr)
-    right_right_height = right_right_child->height;
+  int left_height = safe_height(left_child),
+      right_left_height = safe_height(right_left_child),
+      right_right_height = safe_height(right_right_child);
   node->left->height = 1 + max(left_height, right_left_height);
   node->height = 1 + max(node->left->height, right_right_height);
 }
