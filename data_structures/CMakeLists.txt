@@ -29,6 +29,7 @@ target_include_directories(Sorting PRIVATE "${DATA_STRUCTURE_INCLUDE}")
 
 add_library(AVL INTERFACE)
 target_sources(AVL INTERFACE avl.h)
+target_include_directories(AVL INTERFACE "${DATA_STRUCTURE_INCLUDE}")
 
 enable_testing()
 add_compile_options("$<$<CONFIG:DEBUG>:-fno-omit-frame-pointer>")
@@ -72,3 +73,9 @@ target_include_directories(bst_fuzz PRIVATE "${DATA_STRUCTURE_INCLUDE}")
 target_link_libraries(bst_fuzz PRIVATE BST)
 target_compile_options(bst_fuzz PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,fuzzer>")
 target_link_options(bst_fuzz PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,fuzzer>")
+
+add_executable(avl_fuzz avl_fuzz.cpp)
+target_include_directories(avl_fuzz PRIVATE "${DATA_STRUCTURE_INCLUDE}")
+target_link_libraries(avl_fuzz PRIVATE AVL)
+target_compile_options(avl_fuzz PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,fuzzer>")
+target_link_options(avl_fuzz PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,fuzzer>")
