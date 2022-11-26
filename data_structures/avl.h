@@ -22,6 +22,8 @@ public:
   AVLNode<K, V> *get(K key) const;
   void ll_rotate(AVLNode<K, V> *node);
   void rr_rotate(AVLNode<K, V> *node);
+  void lr_rotate(AVLNode<K, V> *node);
+  void rl_rotate(AVLNode<K, V> *node);
   void insert(K key, V value);
   void remove(K key);
 };
@@ -103,4 +105,69 @@ void AVLTree<K, V>::rr_rotate(AVLNode<K, V> *node) {
     right_right_height = right_right_child->height;
   node->left->height = 1 + max(left_height, right_left_height);
   node->height = 1 + max(node->left->height, right_right_height);
+}
+
+template <typename K, typename V>
+void AVLTree<K, V>::lr_rotate(AVLNode<K, V> *node) {
+  rr_rotate(node->left);
+  ll_rotate(node);
+}
+
+template <typename K, typename V>
+void AVLTree<K, V>::rl_rotate(AVLNode<K, V> *node) {
+  ll_rotate(node->right);
+  rr_rotate(node);
+}
+
+template <typename K, typename V> void AVLTree<K, V>::insert(K key, V value) {
+  auto parent = root;
+  auto node = new AVLNode<K, V>();
+  node->key = key;
+  node->value = value;
+  if (parent == nullptr) {
+    root = node;
+    return;
+  }
+  Deque<AVLNode<K, V> *> parents;
+  while (true) {
+    parents.push_back(parent);
+    if (key < parent->key) {
+      if (parent->left == nullptr) {
+        parent->left = node;
+        break;
+      }
+      parent = parent->left;
+    } else if (key > parent->key) {
+      if (parent->right == nullptr) {
+        parent->right = node;
+        break;
+      }
+      parent = parent->right;
+    }
+  }
+  AVLNode<K, V> *current_node;
+  while (!parents.empty()) {
+    current_node = parents.pop_back();
+    int left_height = -1;
+    if (current_node->left != nullptr)
+      left_height = current_node->left->height;
+    int right_height = -1;
+    if (current_node->right != nullptr)
+      right_height = current_node->right->height;
+    current_node->height = 1 + max(left_height, right_height);
+    int bf = left_height - right_height;
+    if (abs(bf) > 1) {
+      if (key < current_node->key) {
+        if (key < current_node->left->key)
+          ll_rotate(current_node);
+        else
+          lr_rotate(current_node);
+      } else {
+        if (key < current_node->right->key)
+          rl_rotate(current_node);
+        else
+          rr_rotate(current_node);
+      }
+    }
+  }
 }
