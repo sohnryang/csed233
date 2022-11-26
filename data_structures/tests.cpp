@@ -433,3 +433,21 @@ TEST(AVLTreeTest, TestInsert) {
   EXPECT_EQ(tree.get_root()->right->right->left->key, 7);
   EXPECT_EQ(tree.get_root()->right->right->right->key, 16);
 }
+
+TEST(AVLTreeTest, TestRemove) {
+  AVLTree<int, int> tree;
+  tree.insert(3, 3);
+  tree.insert(2, 2);
+  tree.insert(1, 1);
+  tree.insert(4, 4);
+  tree.insert(5, 5);
+  tree.insert(6, 6);
+  tree.insert(7, 7);
+  tree.remove(4);
+  tree.remove(6);
+  tree.remove(7);
+  EXPECT_EQ(tree.get_root()->key, 2);
+  EXPECT_EQ(tree.get_root()->left->key, 1);
+  EXPECT_EQ(tree.get_root()->right->key, 5);
+  EXPECT_EQ(tree.get_root()->right->left->key, 3);
+}
