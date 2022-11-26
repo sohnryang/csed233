@@ -1,0 +1,13 @@
+add_executable(pa3 pa3.cpp avl.cpp bst.cpp closed_hash_function.cpp closed_hash_table.cpp open_hash_function.cpp open_hash_table.cpp sort.cpp tree.cpp utils.cpp)
+target_include_directories(pa3 PRIVATE "${DATA_STRUCTURE_INCLUDE}")
+target_compile_options(pa3 PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,leak>")
+target_link_options(pa3 PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,leak>")
+target_link_libraries(pa3 PRIVATE Deque)
+add_executable(pa3_eval evaluate.cpp)
+
+pa_test(pa3 1 "\"[('insertion',17), ('insertion',20), ('insertion',2), ('insertion',21), ('insertion',4), ('quickSort',NULL)]\"" "17 20 2 21 4\n17 2 20 21 4\n17 2 4 21 20\n4 2 17 21 20\n2 4 17 21 20\n2 4 17 20 21")
+pa_test(pa3 1 "\"[('insertion',5), ('insertion',6), ('insertion',4), ('insertion',3), ('insertion',2), ('insertion',1), ('quickSort',NULL)]\"" "5 6 4 3 2 1\n5 4 6 3 2 1\n5 4 3 6 2 1\n5 4 3 2 6 1\n5 4 3 2 1 6\n1 4 3 2 5 6\n1 2 3 4 5 6")
+pa_test(pa3 2 "\"[('insertion',56), ('insertion',42), ('insertion',20), ('insertion',17), ('insertion',13), ('insertion',28), ('insertion',14), ('mergeSort',NULL)]\"" "56 42 20 17 13 28 14\n42 56 20 17 13 28 14\n42 56 17 20 13 28 14\n17 20 42 56 13 28 14\n17 20 42 56 13 28 14\n17 20 42 56 13 14 28\n13 14 17 20 28 42 56")
+pa_test(pa3 2 "\"[('insertion',6), ('insertion',5), ('insertion',4), ('insertion',3), ('insertion',2), ('insertion',1), ('mergeSort',NULL)]\"" "6 5 4 3 2 1\n5 6 4 3 2 1\n4 5 6 3 2 1\n4 5 6 2 3 1\n4 5 6 1 2 3\n1 2 3 4 5 6")
+pa_test(pa3 3 "\"[('insertion',4), ('insertion',6), ('insertion',6), ('insertion',7), ('deletion',7)]\"" "0\n0\n-1\n0\n0\n4 6\n4 6")
+pa_test(pa3 3 "\"[('insertion',4), ('insertion',2), ('insertion',10), ('insertion',9), ('insertion',15), ('insertion',1), ('deletion',1), ('deletion',4), ('deletion',10)]\"" "0\n0\n0\n0\n0\n0\n0\n0\n0\n9 2 15\n2 9 15")
