@@ -367,3 +367,39 @@ TEST(AVLTreeTest, TestGet) {
   EXPECT_EQ(tree.get(1), left_left_node);
   EXPECT_EQ(tree.get(0), nullptr);
 }
+
+TEST(AVLTreeTest, TestRotate) {
+  auto root = new AVLNode<int, int>();
+  root->key = 3;
+  root->value = 3;
+  root->height = 2;
+  auto left_node = new AVLNode<int, int>();
+  left_node->key = 2;
+  left_node->value = 2;
+  left_node->height = 1;
+  auto right_node = new AVLNode<int, int>();
+  right_node->key = 4;
+  right_node->value = 4;
+  right_node->height = 0;
+
+  root->left = left_node;
+  root->right = right_node;
+
+  auto left_left_node = new AVLNode<int, int>();
+  left_left_node->key = 1;
+  left_left_node->value = 1;
+  left_left_node->height = 0;
+
+  left_node->left = left_left_node;
+
+  AVLTree<int, int> tree(root);
+  tree.ll_rotate(root);
+  EXPECT_EQ(tree.get_root()->value, 2);
+  EXPECT_EQ(tree.get_root()->left->value, 1);
+  EXPECT_EQ(tree.get_root()->right->value, 3);
+  EXPECT_EQ(tree.get_root()->right->right->value, 4);
+  EXPECT_EQ(tree.get_root()->height, 2);
+  EXPECT_EQ(tree.get_root()->left->height, 0);
+  EXPECT_EQ(tree.get_root()->right->height, 1);
+  EXPECT_EQ(tree.get_root()->right->right->height, 0);
+}
