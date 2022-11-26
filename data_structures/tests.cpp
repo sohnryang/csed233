@@ -352,8 +352,6 @@ TEST(AVLTreeTest, TestGet) {
 
   root->left = left_node;
   root->right = right_node;
-  left_node->parent = root;
-  right_node->parent = root;
 
   auto left_left_node = new AVLNode<int, int>();
   left_left_node->key = 1;
@@ -361,7 +359,6 @@ TEST(AVLTreeTest, TestGet) {
   left_left_node->height = 0;
 
   left_node->left = left_left_node;
-  left_left_node->parent = left_node;
 
   AVLTree<int, int> tree(root);
   EXPECT_EQ(tree.get_root(), root);

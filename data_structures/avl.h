@@ -5,7 +5,7 @@
 template <typename K, typename V> struct AVLNode {
   K key;
   V value;
-  AVLNode<K, V> *left, *right, *parent;
+  AVLNode<K, V> *left, *right;
   int height;
 };
 
