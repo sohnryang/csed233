@@ -8,6 +8,8 @@ template <typename K, typename V> struct AVLNode {
   V value;
   AVLNode<K, V> *left, *right;
   int height;
+
+  int balancing_factor();
 };
 
 template <typename K, typename V> class AVLTree {
@@ -28,7 +30,23 @@ public:
   void remove(K key);
 };
 
+template <typename K, typename V> int AVLNode<K, V>::balancing_factor() {
+  int left_height = -1;
+  if (left != nullptr)
+    left_height = left->height;
+  int right_height = -1;
+  if (right != nullptr)
+    right_height = right->height;
+  return left_height - right_height;
+}
+
 template <typename K, typename V> AVLTree<K, V>::AVLTree() : root(nullptr) {}
+
+template <typename K, typename V> int safe_height(AVLNode<K, V> *node) {
+  if (node == nullptr)
+    return -1;
+  return node->height;
+}
 
 template <typename K, typename V>
 AVLTree<K, V>::AVLTree(AVLNode<K, V> *root) : root(root) {}
