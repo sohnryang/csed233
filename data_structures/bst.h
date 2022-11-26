@@ -71,8 +71,7 @@ template <typename K, typename V> void BST<K, V>::insert(K key, V value) {
         break;
       }
       parent = parent->left;
-    }
-    if (key > parent->key) {
+    } else if (key > parent->key) {
       if (parent->right == nullptr) {
         parent->right = node;
         break;
