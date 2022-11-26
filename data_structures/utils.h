@@ -9,6 +9,16 @@ template <typename T> int log2_floor(T x) {
   return sizeof(T) * 8;
 }
 
+template <typename T> T abs(T x) {
+  if (x < 0)
+    return -x;
+  return x;
+}
+
+template <typename T> T max(T x, T y) { return x >= y ? x : y; }
+
+template <typename T> T min(T x, T y) { return x >= y ? y : x; }
+
 template <typename T> void swap(T &x, T &y) {
   T tmp = x;
   x = y;
