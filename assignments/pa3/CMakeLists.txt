@@ -11,3 +11,6 @@ pa_test(pa3 2 "\"[('insertion',56), ('insertion',42), ('insertion',20), ('insert
 pa_test(pa3 2 "\"[('insertion',6), ('insertion',5), ('insertion',4), ('insertion',3), ('insertion',2), ('insertion',1), ('mergeSort',NULL)]\"" "6 5 4 3 2 1\n5 6 4 3 2 1\n4 5 6 3 2 1\n4 5 6 2 3 1\n4 5 6 1 2 3\n1 2 3 4 5 6")
 pa_test(pa3 3 "\"[('insertion',4), ('insertion',6), ('insertion',6), ('insertion',7), ('deletion',7)]\"" "0\n0\n-1\n0\n0\n4 6\n4 6")
 pa_test(pa3 3 "\"[('insertion',4), ('insertion',2), ('insertion',10), ('insertion',9), ('insertion',15), ('insertion',1), ('deletion',1), ('deletion',4), ('deletion',10)]\"" "0\n0\n0\n0\n0\n0\n0\n0\n0\n9 2 15\n2 9 15")
+pa_test(pa3 4 "\"[('insertion',4), ('insertion',6), ('insertion',0), ('deletion',7)]\"" "0\n0\n0\n-1\n4 0 6\n0 4 6")
+pa_test(pa3 4 "\"[('insertion',4), ('insertion',2), ('insertion',10), ('insertion',9), ('insertion',15), ('insertion',5), ('insertion',0), ('deletion',4), ('insertion',10)]\"" "0\n0\n0\n0\n0\n0\n0\n0\n-1\n9 2 0 5 10 15\n0 2 5 9 10 15")
+pa_test(pa3 3 "\"[('insertion',4), ('insertion',6), ('insertion',0), ('deletion',7)]\"" "0\n0\n0\n-1\n4 0 6\n0 4 6")
