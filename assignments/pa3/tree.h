@@ -13,7 +13,10 @@ public:
   /* Add public members if required*/
 
   string print_key() { return to_string(key); };
+  int balancing_factor();
 };
+
+int safe_height(Node *node);
 
 class BinaryTree {
 public:

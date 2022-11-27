@@ -4,6 +4,22 @@
 
 using namespace std;
 
+int Node::balancing_factor() {
+  int left_height = -1;
+  if (left != nullptr)
+    left_height = left->height;
+  int right_height = -1;
+  if (right != nullptr)
+    right_height = right->height;
+  return left_height - right_height;
+}
+
+int safe_height(Node *node) {
+  if (node == nullptr)
+    return -1;
+  return node->height;
+}
+
 string BinaryTree::inOrder() {
   string output;
   _inOrder(output, _root);
