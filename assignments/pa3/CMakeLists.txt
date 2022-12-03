@@ -13,4 +13,8 @@ pa_test(pa3 3 "\"[('insertion',4), ('insertion',6), ('insertion',6), ('insertion
 pa_test(pa3 3 "\"[('insertion',4), ('insertion',2), ('insertion',10), ('insertion',9), ('insertion',15), ('insertion',1), ('deletion',1), ('deletion',4), ('deletion',10)]\"" "0\n0\n0\n0\n0\n0\n0\n0\n0\n9 2 15\n2 9 15")
 pa_test(pa3 4 "\"[('insertion',4), ('insertion',6), ('insertion',0), ('deletion',7)]\"" "0\n0\n0\n-1\n4 0 6\n0 4 6")
 pa_test(pa3 4 "\"[('insertion',4), ('insertion',2), ('insertion',10), ('insertion',9), ('insertion',15), ('insertion',5), ('insertion',0), ('deletion',4), ('insertion',10)]\"" "0\n0\n0\n0\n0\n0\n0\n0\n-1\n9 2 0 5 10 15\n0 2 5 9 10 15")
+pa_test(pa3 5 "\"[('M',4), ('insert',32615), ('insert',315), ('insert',6468), ('insert',94833)]\"" "0: 6468\n1: 32615, 315\n2: empty\n3: 94833")
+pa_test(pa3 5 "\"[('M',4), ('insert',32615), ('insert',315), ('insert',6468), ('insert',94833), ('delete',32615), ('delete',6468)]\"" "0: empty\n1: 315\n2: empty\n3: 94833")
+pa_test(pa3 5 "\"[('M',4), ('insert',32615), ('insert',315), ('insert',6468), ('insert',94833), ('delete',32615), ('delete',6468), ('insert',22)]\"" "0: 22\n1: 315\n2: empty\n3: 94833")
+
 pa_test(pa3 3 "\"[('insertion',4), ('insertion',6), ('insertion',0), ('deletion',7)]\"" "0\n0\n0\n-1\n4 0 6\n0 4 6")
