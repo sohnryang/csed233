@@ -1,26 +1,12 @@
 #include "closed_hash_function.h"
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string>
 
 using namespace std;
 
-
 int ClosedHashFunction::closedhashing(int key) {
-    /////////////////////////////////////////////////////////
-    //////////  TODO: Implement From Here      //////////////
-
-    return -1;
-    ///////////      End of Implementation      /////////////
-    /////////////////////////////////////////////////////////
-  
+  int squared = key * key;
+  auto offset = key_size - index_size / 2;
+  return (squared & (((1 << index_size) - 1) << offset)) >> offset;
 }
-
-
-/////////////////////////////////////////////////////////
-//////////  TODO: Implement From Here      //////////////
-
-/*  Write your codes if you have additional functions  */
-
-///////////      End of Implementation      /////////////
-/////////////////////////////////////////////////////////
