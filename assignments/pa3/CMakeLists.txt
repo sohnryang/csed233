@@ -4,6 +4,29 @@ target_compile_options(pa3 PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,
 target_link_options(pa3 PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,leak>")
 target_link_libraries(pa3 PRIVATE Deque)
 add_executable(pa3_eval evaluate.cpp)
+set(PA3_SRC_DIR "${CMAKE_BINARY_DIR}/pa3_src")
+file(MAKE_DIRECTORY "${PA3_SRC_DIR}")
+add_custom_target(pa3_src ALL
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/utils.h" "${CMAKE_CURRENT_SOURCE_DIR}/utils.h"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/closed_hash_table.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/closed_hash_table.cpp"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/open_hash_function.h" "${CMAKE_CURRENT_SOURCE_DIR}/open_hash_function.h"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/utils.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/utils.cpp"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/closed_hash_table.h" "${CMAKE_CURRENT_SOURCE_DIR}/closed_hash_table.h"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/open_hash_table.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/open_hash_table.cpp"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/tree.h" "${CMAKE_CURRENT_SOURCE_DIR}/tree.h"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/sort.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/sort.cpp"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/avl.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/avl.cpp"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/tree.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/tree.cpp"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/bst.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/bst.cpp"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/bst.h" "${CMAKE_CURRENT_SOURCE_DIR}/bst.h"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/closed_hash_function.h" "${CMAKE_CURRENT_SOURCE_DIR}/closed_hash_function.h"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/avl.h" "${CMAKE_CURRENT_SOURCE_DIR}/avl.h"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/open_hash_table.h" "${CMAKE_CURRENT_SOURCE_DIR}/open_hash_table.h"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/pa3.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/pa3.cpp"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/sort.h" "${CMAKE_CURRENT_SOURCE_DIR}/sort.h"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/closed_hash_function.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/closed_hash_function.cpp"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA3_SRC_DIR}/open_hash_function.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/open_hash_function.cpp"
+)
 
 pa_test(pa3 1 "\"[('insertion',17), ('insertion',20), ('insertion',2), ('insertion',21), ('insertion',4), ('quickSort',NULL)]\"" "17 20 2 21 4\n17 2 20 21 4\n17 2 4 21 20\n4 2 17 21 20\n2 4 17 21 20\n2 4 17 20 21")
 pa_test(pa3 1 "\"[('insertion',5), ('insertion',6), ('insertion',4), ('insertion',3), ('insertion',2), ('insertion',1), ('quickSort',NULL)]\"" "5 6 4 3 2 1\n5 4 6 3 2 1\n5 4 3 6 2 1\n5 4 3 2 6 1\n5 4 3 2 1 6\n1 4 3 2 5 6\n1 2 3 4 5 6")
