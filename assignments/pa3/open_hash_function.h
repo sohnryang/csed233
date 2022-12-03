@@ -6,17 +6,10 @@ using namespace std;
 class OpenHashFunction {
 
 public:
-    OpenHashFunction(int M) : index_size(M) { };
+  OpenHashFunction(int M) : index_size(M){};
 
-    int openhashing(int key);
+  int openhashing(int key);
 
 private:
-    int index_size;
-
-    /////////////////////////////////////////////////////////
-    //////  TODO: Add private members if required ///////////
-
-    ///////////      End of Implementation      /////////////
-    /////////////////////////////////////////////////////////
+  int index_size;
 };
-

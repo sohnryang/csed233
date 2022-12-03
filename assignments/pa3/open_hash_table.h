@@ -1,46 +1,38 @@
 #pragma once
+#include "open_hash_function.h"
 #include <iostream>
 #include <string>
-#include "open_hash_function.h"
 
 using namespace std;
 
 enum OpenTableState {
-    OPEN_EMPTY,
-    OPEN_OCCUPIED,
+  OPEN_EMPTY,
+  OPEN_OCCUPIED,
 };
 
 class HashNode {
-  public:
-    int key;
-    HashNode *next;
-    HashNode(int key){
-      this->key = key;
-      this->next = NULL;
-    }
+public:
+  int key;
+  HashNode *next;
+  HashNode(int key) {
+    this->key = key;
+    this->next = NULL;
+  }
 };
 
 class OpenHashTable {
 public:
-    OpenHashTable(int table_size, OpenHashFunction *hf);
-    ~OpenHashTable();
+  OpenHashTable(int table_size, OpenHashFunction *hf);
+  ~OpenHashTable();
 
-    void print_table(ostream &out);
+  void print_table(ostream &out);
 
-    void insert(int key);
-    void erase(int key);
+  void insert(int key);
+  void erase(int key);
 
 private:
-
-    const int table_size;
-    OpenHashFunction *hf;
-    HashNode** table;
-    OpenTableState *states;
-
-    /////////////////////////////////////////////////////////
-    //////  TODO: Add private members if required ///////////
-
-    ///////////      End of Implementation      /////////////
-    /////////////////////////////////////////////////////////
+  const int table_size;
+  OpenHashFunction *hf;
+  HashNode **table;
+  OpenTableState *states;
 };
-
