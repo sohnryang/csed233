@@ -54,15 +54,14 @@ void Graph::sortByLabel(vector<Edge> &arr) {
 }
 
 void Graph::dfs_traverse(int here_id, vector<bool> &visited,
-                         vector<int> &visit_seq, vector<int> &finish_seq) {
+                         vector<int> &visit_seq) {
   visited[here_id] = true;
   visit_seq.push_back(here_id);
   for (int i = 0; i < graph[here_id].size(); i++) {
     int there_id = graph[here_id][i].id;
     if (!visited[there_id])
-      dfs_traverse(there_id, visited, visit_seq, finish_seq);
+      dfs_traverse(there_id, visited, visit_seq);
   }
-  finish_seq.push_back(here_id);
 }
 
 void Graph::sortGraph() {
@@ -82,7 +81,7 @@ string Graph::DFS() {
   sortByLabel(nodes);
   sortGraph();
   vector<bool> visited(label_count, false);
-  vector<int> visit_seq, finish_seq;
+  vector<int> visit_seq;
   string result;
   for (int i = 0; i < label_count; i++) {
     int here_id = nodes[i].id;
@@ -90,7 +89,7 @@ string Graph::DFS() {
       continue;
     if (!result.empty())
       result += "\n";
-    dfs_traverse(here_id, visited, visit_seq, finish_seq);
+    dfs_traverse(here_id, visited, visit_seq);
     for (int i = 0; i < visit_seq.size(); i++) {
       if (i != 0)
         result += " ";

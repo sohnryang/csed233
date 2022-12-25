@@ -52,8 +52,7 @@ private:
   int getNodeId(const string &label);
   void sortByLabel(vector<Edge> &arr);
   void merge_arr(vector<Edge> &arr, int lo, int mid, int hi);
-  void dfs_traverse(int here_id, vector<bool> &visited, vector<int> &visit_seq,
-                    vector<int> &finish_seq);
+  void dfs_traverse(int here_id, vector<bool> &visited, vector<int> &visit_seq);
 
   int label_count;
   unordered_map<string, int> label_id_table;
