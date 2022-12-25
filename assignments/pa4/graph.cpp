@@ -145,6 +145,10 @@ string Graph::BFS() {
 int Graph::addDirectedEdge(string nodeA, string nodeB) {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
+  int nodeA_id = getNodeId(nodeA), nodeB_id = getNodeId(nodeB);
+  for (int i = 0; i < graph[nodeA_id].size(); i++)
+    if (graph[nodeA_id][i].id == nodeB_id)
+      return 0;
   addDirectedEdge(nodeA, nodeB, 0);
   return 0;
   ///////////      End of Implementation      /////////////
@@ -164,7 +168,8 @@ int Graph::addDirectedEdge(string nodeA, string nodeB, int weight) {
 int Graph::addUndirectedEdge(string nodeA, string nodeB) {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
-  addUndirectedEdge(nodeA, nodeB, 0);
+  addDirectedEdge(nodeA, nodeB);
+  addDirectedEdge(nodeB, nodeA);
   return 0;
   ///////////      End of Implementation      /////////////
   ///////////////////////////////////////////////////////
