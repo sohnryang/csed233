@@ -53,6 +53,8 @@ private:
   void sortByLabel(vector<Edge> &arr);
   void merge_arr(vector<Edge> &arr, int lo, int mid, int hi);
   void dfs_traverse(int here_id, vector<bool> &visited, vector<int> &visit_seq);
+  void count_cycles(int here_id, int parent_id, vector<int> &parent,
+                    vector<int> &visited, int &count);
 
   int label_count;
   unordered_map<string, int> label_id_table;

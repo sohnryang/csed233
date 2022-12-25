@@ -69,6 +69,25 @@ void Graph::sortGraph() {
     sortByLabel(graph[i]);
 }
 
+void Graph::count_cycles(int here_id, int parent_id, vector<int> &parent,
+                         vector<int> &visited, int &count) {
+  visited[here_id] = 1;
+  parent[here_id] = parent_id;
+  for (int i = 0; i < graph[here_id].size(); i++) {
+    int there_id = graph[here_id][i].id;
+    if (parent[here_id] == there_id)
+      continue;
+    if (visited[there_id] == 2)
+      continue;
+    if (visited[there_id] == 1) {
+      count++;
+      continue;
+    }
+    count_cycles(there_id, here_id, parent, visited, count);
+  }
+  visited[here_id] = 2;
+}
+
 ///////////      End of Implementation      /////////////
 /////////////////////////////////////////////////////////
 
@@ -190,8 +209,17 @@ int Graph::addUndirectedEdge(string nodeA, string nodeB, int weight) {
 int Graph::countUndirectedCycle() {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
-
-  return 0;
+  vector<int> visited(label_count, 0), parent(label_count, -1);
+  int count = 0;
+  for (int i = 0; i < label_count; i++) {
+    if (visited[i] == 2)
+      continue;
+    count_cycles(i, -1, parent, visited, count);
+    for (int j = 0; j < label_count; j++)
+      if (visited[j] == 1)
+        visited[j] = 2;
+  }
+  return count;
   ///////////      End of Implementation      /////////////
   ///////////////////////////////////////////////////////
 }
