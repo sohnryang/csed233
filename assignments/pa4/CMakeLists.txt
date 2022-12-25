@@ -1,0 +1,13 @@
+add_executable(pa4 graph.cpp pa4.cpp utils.cpp)
+target_include_directories(pa4 PRIVATE "${DATA_STRUCTURE_INCLUDE}")
+target_compile_options(pa4 PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,leak>")
+target_link_options(pa4 PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,leak>")
+target_link_libraries(pa4 PRIVATE Deque)
+add_executable(pa4_eval evaluate.cpp)
+set(PA4_SRC_DIR "${CMAKE_BINARY_DIR}/pa4_src")
+file(MAKE_DIRECTORY "${PA4_SRC_DIR}")
+
+pa_test(pa4 1 "\"[('A','C'), ('A','B'), ('A','D'), ('B','C'), ('B','D'), ('B','E'), ('B','F'), ('C','F'), ('C','E'), ('End','DFS')]\"" "A B C E F D")
+pa_test(pa4 1 "\"[('A','C'), ('A','B'), ('A','D'), ('B','C'), ('B','D'), ('B','E'), ('B','F'), ('C','F'), ('C','E'), ('End','BFS')]\"" "A B C D E F")
+pa_test(pa4 1 "\"[('A','C'), ('A','B'), ('A','D'), ('B','C'), ('B','D'), ('B','E'), ('B','F'), ('C','F'), ('C','E'), ('G','H'), ('End','DFS')]\"" "A B C E F D\nG H")
+pa_test(pa4 1 "\"[('A','B'), ('A','C'), ('A','D'), ('B','F'), ('C','F'), ('H','G'), ('E','J'), ('J','I'), ('End','DFS')]\"" "A B F C D\nE J I\nG H")
