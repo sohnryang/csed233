@@ -11,6 +11,7 @@ public:
   Vector<T>(int count, T value);
   Vector<T>(const Vector<T> &other);
   ~Vector<T>();
+  Vector<T> &operator=(const Vector<T> &other);
   void push_back(T value);
   int size() const;
   T &operator[](int index);
@@ -41,6 +42,20 @@ Vector<T>::Vector(const Vector<T> &other)
 }
 
 template <typename T> Vector<T>::~Vector() { delete[] internal_arr; }
+
+template <typename T> Vector<T> &Vector<T>::operator=(const Vector<T> &other) {
+  if (this == &other)
+    return *this;
+  if (capacity != other.capacity) {
+    delete[] internal_arr;
+    capacity = other.capacity;
+    internal_arr = new T[capacity];
+  }
+  arr_len = other.arr_len;
+  for (int i = 0; i < arr_len; i++)
+    internal_arr[i] = other.internal_arr[i];
+  return *this;
+}
 
 template <typename T> void Vector<T>::push_back(T value) {
   if (arr_len == capacity) {
