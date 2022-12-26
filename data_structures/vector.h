@@ -17,17 +17,17 @@ public:
 };
 
 template <typename T> Vector<T>::Vector() : capacity(1), arr_len(0) {
-  internal_arr = new int[capacity];
+  internal_arr = new T[capacity];
 }
 
 template <typename T>
 Vector<T>::Vector(int count) : capacity(count), arr_len(count) {
-  internal_arr = new int[capacity];
+  internal_arr = new T[capacity];
 }
 
 template <typename T>
 Vector<T>::Vector(int count, T value) : capacity(count), arr_len(count) {
-  internal_arr = new int[capacity];
+  internal_arr = new T[capacity];
   for (int i = 0; i < arr_len; i++)
     internal_arr[i] = value;
 }
