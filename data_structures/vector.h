@@ -12,6 +12,7 @@ public:
   Vector<T>(const Vector<T> &other);
   ~Vector<T>();
   Vector<T> &operator=(const Vector<T> &other);
+  const T &operator[](int index) const;
   void push_back(T value);
   int size() const;
   T &operator[](int index);
@@ -72,5 +73,9 @@ template <typename T> void Vector<T>::push_back(T value) {
 template <typename T> int Vector<T>::size() const { return arr_len; }
 
 template <typename T> T &Vector<T>::operator[](int index) {
+  return internal_arr[index];
+}
+
+template <typename T> const T &Vector<T>::operator[](int index) const {
   return internal_arr[index];
 }
