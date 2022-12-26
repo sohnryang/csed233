@@ -5,6 +5,7 @@
 
 #include <deque.h>          // expand: true
 #include <priority_queue.h> // expand: true
+#include <utils.h>          // expand: true
 
 // TODO: remove training wheels
 #include <unordered_map>

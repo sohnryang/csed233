@@ -3,7 +3,6 @@
 #include <iostream>
 #include <string>
 
-#include <utils.h> // expand: true
 #define INF 2147483647
 using namespace std;
 
