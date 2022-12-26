@@ -9,6 +9,7 @@ public:
   Vector<T>();
   Vector<T>(int count);
   Vector<T>(int count, T value);
+  Vector<T>(const Vector<T> &other);
   ~Vector<T>();
   void push_back(T value);
   int size() const;
@@ -29,6 +30,14 @@ Vector<T>::Vector(int count, T value) : capacity(count), arr_len(count) {
   internal_arr = new int[capacity];
   for (int i = 0; i < arr_len; i++)
     internal_arr[i] = value;
+}
+
+template <typename T>
+Vector<T>::Vector(const Vector<T> &other)
+    : capacity(other.capacity), arr_len(other.arr_len) {
+  internal_arr = new T[capacity];
+  for (int i = 0; i < arr_len; i++)
+    internal_arr[i] = other.internal_arr[i];
 }
 
 template <typename T> Vector<T>::~Vector() { delete[] internal_arr; }
