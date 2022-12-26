@@ -3,7 +3,6 @@
 #include <iostream>
 #include <string>
 
-#include <deque.h> // expand: true
 #define INF 2147483647
 using namespace std;
 
@@ -86,6 +85,32 @@ void Graph::count_cycles(int here_id, int parent_id, vector<int> &parent,
     count_cycles(there_id, here_id, parent, visited, count);
   }
   visited[here_id] = 2;
+}
+
+bool Graph::check_dag(int here_id, vector<int> &visited) {
+  visited[here_id] = 1;
+  for (int i = 0; i < graph[here_id].size(); i++) {
+    int there_id = graph[here_id][i].id;
+    if (visited[there_id] == 2)
+      continue;
+    if (visited[there_id] == 1)
+      return false;
+    if (!check_dag(there_id, visited))
+      return false;
+  }
+  visited[here_id] = 2;
+  return true;
+}
+
+void Graph::topological_sort(int here_id, vector<bool> &visited,
+                             Deque<int> &sort_result) {
+  visited[here_id] = true;
+  for (int i = 0; i < graph[here_id].size(); i++) {
+    int there_id = graph[here_id][i].id;
+    if (!visited[there_id])
+      topological_sort(there_id, visited, sort_result);
+  }
+  sort_result.push_front(here_id);
 }
 
 ///////////      End of Implementation      /////////////
@@ -227,8 +252,31 @@ int Graph::countUndirectedCycle() {
 string Graph::getTopologicalSort() {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
-
-  return "";
+  {
+    vector<int> visited(label_count, 0);
+    if (!check_dag(0, visited))
+      return "error";
+  }
+  sortGraph();
+  vector<Edge> nodes(label_count);
+  for (int i = 0; i < label_count; i++)
+    nodes[i] = Edge(0, i);
+  sortByLabel(nodes);
+  vector<bool> visited(label_count, false);
+  Deque<int> sort_result;
+  for (int i = label_count - 1; i >= 0; i--) {
+    int start_id = nodes[i].id;
+    if (visited[start_id])
+      continue;
+    topological_sort(start_id, visited, sort_result);
+  }
+  string res;
+  while (!sort_result.empty()) {
+    if (!res.empty())
+      res += " ";
+    res += labels[sort_result.pop_front()];
+  }
+  return res;
   ///////////      End of Implementation      /////////////
   ///////////////////////////////////////////////////////
 }

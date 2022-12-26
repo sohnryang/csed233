@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 
+#include <deque.h> // expand: true
+
 // TODO: remove training wheels
 #include <unordered_map>
 #include <vector>
@@ -55,6 +57,9 @@ private:
   void dfs_traverse(int here_id, vector<bool> &visited, vector<int> &visit_seq);
   void count_cycles(int here_id, int parent_id, vector<int> &parent,
                     vector<int> &visited, int &count);
+  bool check_dag(int here_id, vector<int> &visited);
+  void topological_sort(int here_id, vector<bool> &visited,
+                        Deque<int> &sort_result);
 
   int label_count;
   unordered_map<string, int> label_id_table;
