@@ -17,9 +17,19 @@ using namespace std;
 
 struct Edge {
   int weight, id;
+  string label;
 
-  Edge() : weight(0), id(0) {}
-  Edge(int weight, int id) : weight(weight), id(id) {}
+  Edge() : weight(0), id(0), label() {}
+  Edge(int weight, int id) : weight(weight), id(id), label() {}
+  Edge(int weight, int id, const string &label)
+      : weight(weight), id(id), label(label) {}
+  bool operator<(const Edge &another) {
+    if (this->weight < another.weight)
+      return true;
+    if (this->weight == another.weight && this->label < another.label)
+      return true;
+    return false;
+  }
 };
 
 ///////////      End of Implementation      /////////////

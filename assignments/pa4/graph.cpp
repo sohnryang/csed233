@@ -3,8 +3,8 @@
 #include <iostream>
 #include <string>
 
-#include <priority_queue.h>
-#include <utils.h> // expand: true
+#include <priority_queue.h> // expand: true
+#include <utils.h>          // expand: true
 #define INF 2147483647
 using namespace std;
 
@@ -207,7 +207,7 @@ int Graph::addDirectedEdge(string nodeA, string nodeB, int weight) {
     graph[nodeA_id][i].weight = min_val(weight, graph[nodeA_id][i].weight);
     return 0;
   }
-  graph[nodeA_id].push_back(Edge(weight, nodeB_id));
+  graph[nodeA_id].push_back(Edge(weight, nodeB_id, nodeB));
   return 0;
   ///////////      End of Implementation      /////////////
   ///////////////////////////////////////////////////////
@@ -304,8 +304,45 @@ int Graph::countDirectedCycle() {
 string Graph::getShortestPath(string source, string destination) {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
-
-  return "";
+  sortGraph();
+  vector<int> dist(label_count, -1);
+  vector<int> parent(label_count, -1);
+  int source_id = label_id_table[source];
+  dist[source_id] = 0;
+  PriorityQueue<Edge> pq;
+  pq.insert(Edge(0, source_id, source));
+  while (!pq.empty()) {
+    Edge edge = pq.remove();
+    int here_id = edge.id;
+    int here_dist = edge.weight;
+    if (dist[here_id] >= 0 && dist[here_id] < edge.weight)
+      continue;
+    for (int i = 0; i < graph[here_id].size(); i++) {
+      int there_id = graph[here_id][i].id;
+      int there_dist = here_dist + graph[here_id][i].weight;
+      if (dist[there_id] == -1 || dist[there_id] > there_dist) {
+        dist[there_id] = there_dist;
+        parent[there_id] = here_id;
+        pq.insert(Edge(there_dist, there_id, labels[there_id]));
+      }
+    }
+  }
+  int dest_id = label_id_table[destination];
+  if (dist[dest_id] == -1)
+    return "error";
+  Deque<int> path;
+  int current = dest_id;
+  while (current != -1) {
+    path.push_front(current);
+    current = parent[current];
+  }
+  string res;
+  while (!path.empty()) {
+    res += labels[path.pop_front()];
+    res += " ";
+  }
+  res += to_string(dist[dest_id]);
+  return res;
   ///////////      End of Implementation      /////////////
   /////////////////////////////////////////////////////////
 }
