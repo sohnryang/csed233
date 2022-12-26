@@ -284,8 +284,17 @@ string Graph::getTopologicalSort() {
 int Graph::countDirectedCycle() {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
-
-  return 0;
+  vector<int> visited(label_count, 0), parent(label_count, -1);
+  int count = 0;
+  for (int i = 0; i < label_count; i++) {
+    if (visited[i] == 2)
+      continue;
+    count_cycles(i, -1, parent, visited, count);
+    for (int j = 0; j < label_count; j++)
+      if (visited[j] == 1)
+        visited[j] = 2;
+  }
+  return count;
   ///////////      End of Implementation      /////////////
   ///////////////////////////////////////////////////////
 }
