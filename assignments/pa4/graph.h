@@ -7,10 +7,10 @@
 #include <priority_queue.h> // expand: true
 #include <union_find.h>     // expand: true
 #include <utils.h>          // expand: true
+#include <vector.h>         // expand: true
 
 // TODO: remove training wheels
 #include <unordered_map>
-#include <vector>
 #define NodeMaxCount 101
 #define INF 2147483647
 using namespace std;
@@ -96,23 +96,23 @@ private:
   int getNodeId(const string &label);
   int compareByLabel(const Edge &edge1, const Edge &edge2);
   void sortGraph();
-  void sortGraph(vector<vector<Edge>> &graph);
-  template <typename T> void sortEdges(vector<Edge> &arr, const T &comparator);
+  void sortGraph(Vector<Vector<Edge>> &graph);
+  template <typename T> void sortEdges(Vector<Edge> &arr, const T &comparator);
   template <typename T>
-  void mergeArr(vector<Edge> &arr, const T &comparator, int lo, int mid,
+  void mergeArr(Vector<Edge> &arr, const T &comparator, int lo, int mid,
                 int hi);
-  void dfsTraverse(int here_id, vector<bool> &visited, vector<int> &visit_seq);
-  void countCycles(int here_id, int parent_id, vector<int> &parent,
-                   vector<int> &visited, int &count);
-  bool checkDag(int here_id, vector<int> &visited);
-  void topologicalSort(int here_id, vector<bool> &visited,
+  void dfsTraverse(int here_id, Vector<bool> &visited, Vector<int> &visit_seq);
+  void countCycles(int here_id, int parent_id, Vector<int> &parent,
+                   Vector<int> &visited, int &count);
+  bool checkDag(int here_id, Vector<int> &visited);
+  void topologicalSort(int here_id, Vector<bool> &visited,
                        Deque<int> &sort_result);
-  void addAdjacent(int here_id, PriorityQueue<Edge> &pq, vector<bool> &added);
+  void addAdjacent(int here_id, PriorityQueue<Edge> &pq, Vector<bool> &added);
 
   int label_count;
   unordered_map<string, int> label_id_table;
-  vector<string> labels;
-  vector<vector<Edge>> graph;
+  Vector<string> labels;
+  Vector<Vector<Edge>> graph;
 
   ///////////      End of Implementation      /////////////
   /////////////////////////////////////////////////////////

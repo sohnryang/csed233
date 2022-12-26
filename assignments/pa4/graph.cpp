@@ -18,7 +18,8 @@ int Graph::getNodeId(const string &label) {
     id = label_count++;
     label_id_table[label] = id;
     labels.push_back(label);
-    graph.push_back({});
+    Vector<Edge> vec;
+    graph.push_back(vec);
   }
   return id;
 }
@@ -43,9 +44,9 @@ int Graph::WeightComparator::operator()(const Edge &edge1,
 }
 
 template <typename T>
-void Graph::mergeArr(vector<Edge> &arr, const T &comparator, int lo, int mid,
+void Graph::mergeArr(Vector<Edge> &arr, const T &comparator, int lo, int mid,
                      int hi) {
-  std::vector<Edge> left_arr(mid - lo), right_arr(hi - mid);
+  Vector<Edge> left_arr(mid - lo), right_arr(hi - mid);
   for (int i = 0; i < mid - lo; i++)
     left_arr[i] = arr[lo + i];
   for (int i = 0; i < hi - mid; i++)
@@ -64,7 +65,7 @@ void Graph::mergeArr(vector<Edge> &arr, const T &comparator, int lo, int mid,
 }
 
 template <typename T>
-void Graph::sortEdges(vector<Edge> &arr, const T &comparator) {
+void Graph::sortEdges(Vector<Edge> &arr, const T &comparator) {
   for (int subarr_size = 1; subarr_size < arr.size(); subarr_size *= 2) {
     for (int lo = 0; lo < arr.size(); lo += 2 * subarr_size) {
       int mid = std::min(lo + subarr_size, (int)arr.size()),
@@ -74,8 +75,8 @@ void Graph::sortEdges(vector<Edge> &arr, const T &comparator) {
   }
 }
 
-void Graph::dfsTraverse(int here_id, vector<bool> &visited,
-                        vector<int> &visit_seq) {
+void Graph::dfsTraverse(int here_id, Vector<bool> &visited,
+                        Vector<int> &visit_seq) {
   visited[here_id] = true;
   visit_seq.push_back(here_id);
   for (int i = 0; i < graph[here_id].size(); i++) {
@@ -87,13 +88,13 @@ void Graph::dfsTraverse(int here_id, vector<bool> &visited,
 
 void Graph::sortGraph() { sortGraph(graph); }
 
-void Graph::sortGraph(vector<vector<Edge>> &graph) {
+void Graph::sortGraph(Vector<Vector<Edge>> &graph) {
   for (int i = 0; i < label_count; i++)
     sortEdges(graph[i], LabelComparator(*this));
 }
 
-void Graph::countCycles(int here_id, int parent_id, vector<int> &parent,
-                        vector<int> &visited, int &count) {
+void Graph::countCycles(int here_id, int parent_id, Vector<int> &parent,
+                        Vector<int> &visited, int &count) {
   visited[here_id] = 1;
   parent[here_id] = parent_id;
   for (int i = 0; i < graph[here_id].size(); i++) {
@@ -111,7 +112,7 @@ void Graph::countCycles(int here_id, int parent_id, vector<int> &parent,
   visited[here_id] = 2;
 }
 
-bool Graph::checkDag(int here_id, vector<int> &visited) {
+bool Graph::checkDag(int here_id, Vector<int> &visited) {
   visited[here_id] = 1;
   for (int i = 0; i < graph[here_id].size(); i++) {
     int there_id = graph[here_id][i].dest;
@@ -126,7 +127,7 @@ bool Graph::checkDag(int here_id, vector<int> &visited) {
   return true;
 }
 
-void Graph::topologicalSort(int here_id, vector<bool> &visited,
+void Graph::topologicalSort(int here_id, Vector<bool> &visited,
                             Deque<int> &sort_result) {
   visited[here_id] = true;
   for (int i = 0; i < graph[here_id].size(); i++) {
@@ -138,7 +139,7 @@ void Graph::topologicalSort(int here_id, vector<bool> &visited,
 }
 
 void Graph::addAdjacent(int here_id, PriorityQueue<Edge> &pq,
-                        vector<bool> &added) {
+                        Vector<bool> &added) {
   added[here_id] = true;
   for (int i = 0; i < graph[here_id].size(); i++) {
     int there_id = graph[here_id][i].dest;
@@ -156,13 +157,13 @@ void Graph::addAdjacent(int here_id, PriorityQueue<Edge> &pq,
 string Graph::DFS() {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
-  vector<Edge> nodes(label_count);
+  Vector<Edge> nodes(label_count);
   for (int i = 0; i < label_count; i++)
     nodes[i] = Edge(0, i);
   sortEdges(nodes, LabelComparator(*this));
   sortGraph();
-  vector<bool> visited(label_count, false);
-  vector<int> visit_seq;
+  Vector<bool> visited(label_count, false);
+  Vector<int> visit_seq;
   string result;
   for (int i = 0; i < label_count; i++) {
     int here_id = nodes[i].dest;
@@ -186,12 +187,12 @@ string Graph::DFS() {
 string Graph::BFS() {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
-  vector<Edge> nodes(label_count);
+  Vector<Edge> nodes(label_count);
   for (int i = 0; i < label_count; i++)
     nodes[i] = Edge(0, i);
   sortEdges(nodes, LabelComparator(*this));
   sortGraph();
-  vector<bool> visited(label_count, false);
+  Vector<bool> visited(label_count, false);
   string result;
   for (int i = 0; i < label_count; i++) {
     int start_id = nodes[i].dest;
@@ -271,7 +272,7 @@ int Graph::addUndirectedEdge(string nodeA, string nodeB, int weight) {
 int Graph::countUndirectedCycle() {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
-  vector<int> visited(label_count, 0), parent(label_count, -1);
+  Vector<int> visited(label_count, 0), parent(label_count, -1);
   int count = 0;
   for (int i = 0; i < label_count; i++) {
     if (visited[i] == 2)
@@ -290,16 +291,16 @@ string Graph::getTopologicalSort() {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
   {
-    vector<int> visited(label_count, 0);
+    Vector<int> visited(label_count, 0);
     if (!checkDag(0, visited))
       return "error";
   }
   sortGraph();
-  vector<Edge> nodes(label_count);
+  Vector<Edge> nodes(label_count);
   for (int i = 0; i < label_count; i++)
     nodes[i] = Edge(0, i);
   sortEdges(nodes, LabelComparator(*this));
-  vector<bool> visited(label_count, false);
+  Vector<bool> visited(label_count, false);
   Deque<int> sort_result;
   for (int i = label_count - 1; i >= 0; i--) {
     int start_id = nodes[i].dest;
@@ -321,7 +322,7 @@ string Graph::getTopologicalSort() {
 int Graph::countDirectedCycle() {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
-  vector<int> visited(label_count, 0), parent(label_count, -1);
+  Vector<int> visited(label_count, 0), parent(label_count, -1);
   int count = 0;
   for (int i = 0; i < label_count; i++) {
     if (visited[i] == 2)
@@ -340,8 +341,8 @@ string Graph::getShortestPath(string source, string destination) {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
   sortGraph();
-  vector<int> dist(label_count, -1);
-  vector<int> parent(label_count, -1);
+  Vector<int> dist(label_count, -1);
+  Vector<int> parent(label_count, -1);
   int source_id = label_id_table[source];
   dist[source_id] = 0;
   PriorityQueue<Edge> pq;
@@ -385,12 +386,12 @@ string Graph::getShortestPath(string source, string destination) {
 string Graph::getAllShortestPaths() {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
-  vector<vector<Edge>> dist(label_count);
-  vector<Edge> nodes(label_count);
+  Vector<Vector<Edge>> dist(label_count);
+  Vector<Edge> nodes(label_count);
   for (int i = 0; i < label_count; i++)
     nodes[i] = Edge(0, i);
   sortEdges(nodes, LabelComparator(*this));
-  vector<int> node_id_inv(label_count);
+  Vector<int> node_id_inv(label_count);
   for (int i = 0; i < label_count; i++)
     node_id_inv[nodes[i].dest] = i;
   for (int i = 0; i < label_count; i++) {
@@ -438,8 +439,8 @@ string Graph::getAllShortestPaths() {
 int Graph::primMST(ofstream &fout, string startNode) {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
-  vector<bool> added(label_count, false);
-  vector<Edge> tree_edges;
+  Vector<bool> added(label_count, false);
+  Vector<Edge> tree_edges;
   PriorityQueue<Edge> pq;
   int start_id = label_id_table[startNode];
   addAdjacent(start_id, pq, added);
@@ -467,7 +468,7 @@ int Graph::primMST(ofstream &fout, string startNode) {
 int Graph::kruskalMST(ofstream &fout) {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
-  vector<Edge> edges;
+  Vector<Edge> edges;
   for (int i = 0; i < graph.size(); i++) {
     for (int j = 0; j < graph[i].size(); j++) {
       Edge edge = graph[i][j];
