@@ -467,8 +467,27 @@ int Graph::primMST(ofstream &fout, string startNode) {
 int Graph::kruskalMST(ofstream &fout) {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
-
-  return 0;
+  vector<Edge> edges;
+  for (int i = 0; i < graph.size(); i++) {
+    for (int j = 0; j < graph[i].size(); j++) {
+      Edge edge = graph[i][j];
+      edge.src = i;
+      edges.push_back(edge);
+    }
+  }
+  sortEdges(edges, WeightComparator(*this));
+  UnionFind uf(label_count);
+  int mst_cost = 0;
+  for (int i = 0; i < edges.size(); i++) {
+    Edge edge = edges[i];
+    if (uf.is_same_set(edge.src, edge.dest))
+      continue;
+    uf.union_set(edge.src, edge.dest);
+    fout << labels[edge.src] << " " << labels[edge.dest] << " " << edge.weight
+         << "\n";
+    mst_cost += edge.weight;
+  }
+  return mst_cost;
   ///////////      End of Implementation      /////////////
   /////////////////////////////////////////////////////////
 }

@@ -36,3 +36,6 @@ pa_test(pa4 6 "\"[('A-B',4),('B-C',9),('C-E',-2),('E-C',8),('B-H',1),('A-H',4),(
 pa_test(pa4 7 "\"[('A-B', 3), ('A-C', 1), ('B-C', 4), ('B-D', 1), ('C-D', 2), ('D-E', 5), ('MST', 'A')]\"" "A C 1\nC D 2\nD B 1\nD E 5\n9")
 pa_test(pa4 7 "\"[('A-B', 3), ('A-C', 1), ('B-C', 4), ('B-D', 1), ('C-D', 2), ('D-E', 5), ('MST', 'E')]\"" "E D 5\nD B 1\nD C 2\nC A 1\n9")
 pa_test(pa4 7 "\"[('A-B', 3), ('A-C', 1), ('B-C', 1), ('B-D', 4), ('C-D', 2), ('D-E', 5), ('MST', 'E')]\"" "E D 5\nD C 2\nC A 1\nC B 1\n9")
+pa_test(pa4 8 "\"[('A-B', 3), ('A-C', 1), ('B-C', 4), ('B-D', 1), ('C-D', 2), ('D-E', 5), ('MST', NULL)]\"" "A C 1\nB D 1\nC D 2\nD E 5\n9")
+pa_test(pa4 8 "\"[('D-B', 1), ('D-C', 2), ('E-D', 5), ('B-A', 3), ('C-A', 1), ('C-B', 4), ('MST', NULL)]\"" "A C 1\nB D 1\nC D 2\nD E 5\n9")
+pa_test(pa4 8 "\"[('A-B', 1), ('B-C', 1), ('C-D', 1), ('D-A', 1), ('A-C', 1), ('B-D', 1), ('MST', NULL)]\"" "A B 1\nA C 1\nA D 1\n3")
