@@ -511,3 +511,10 @@ TEST(VectorTest, TestClear) {
   vec.clear();
   EXPECT_EQ(vec.size(), 0);
 }
+
+TEST(VectorTest, TestAssign) {
+  Vector<int> vec;
+  vec.assign(10, 42);
+  for (int i = 0; i < 10; i++)
+    EXPECT_EQ(vec[i], 42);
+}
