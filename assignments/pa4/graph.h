@@ -18,17 +18,29 @@ using namespace std;
 struct Edge {
   int weight, id;
   string label;
+  bool finite;
 
-  Edge() : weight(0), id(0), label() {}
-  Edge(int weight, int id) : weight(weight), id(id), label() {}
+  Edge() : weight(0), id(0), label(), finite(true) {}
+  Edge(int weight, int id) : weight(weight), id(id), label(), finite(true) {}
   Edge(int weight, int id, const string &label)
-      : weight(weight), id(id), label(label) {}
+      : weight(weight), id(id), label(label), finite(true) {}
+  Edge(bool finite, int id, const string &label)
+      : weight(0), id(id), label(label), finite(finite) {}
   bool operator<(const Edge &another) {
+    if (!this->finite)
+      return false;
+    if (!another.finite)
+      return true;
     if (this->weight < another.weight)
       return true;
     if (this->weight == another.weight && this->label < another.label)
       return true;
     return false;
+  }
+  Edge operator+(const Edge &another) {
+    if (!this->finite || !another.finite)
+      return Edge(false, another.id, "");
+    return Edge(this->weight + another.weight, another.id);
   }
 };
 

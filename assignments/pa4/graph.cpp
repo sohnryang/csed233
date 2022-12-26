@@ -350,8 +350,7 @@ string Graph::getShortestPath(string source, string destination) {
 string Graph::getAllShortestPaths() {
   /////////////////////////////////////////////////////////
   //////////  TODO: Implement From Here      //////////////
-  vector<vector<int>> dist(label_count);
-  vector<vector<bool>> finite(label_count);
+  vector<vector<Edge>> dist(label_count);
   vector<Edge> nodes(label_count);
   for (int i = 0; i < label_count; i++)
     nodes[i] = Edge(0, i);
@@ -361,28 +360,25 @@ string Graph::getAllShortestPaths() {
     node_id_inv[nodes[i].id] = i;
   for (int i = 0; i < label_count; i++) {
     int here_id = nodes[i].id;
-    dist[i].assign(label_count, 0);
-    finite[i].assign(label_count, false);
+    dist[i].assign(label_count, Edge(false, -1, ""));
     for (int j = 0; j < graph[here_id].size(); j++) {
       int there_id = graph[here_id][j].id;
-      dist[i][node_id_inv[there_id]] = graph[here_id][j].weight;
-      finite[i][node_id_inv[there_id]] = true;
+      dist[i][node_id_inv[there_id]].id = there_id;
+    }
+    for (int j = 0; j < graph[here_id].size(); j++) {
+      int there_id = graph[here_id][j].id;
+      dist[i][node_id_inv[there_id]] = graph[here_id][j];
     }
   }
   for (int i = 0; i < label_count; i++) {
-    dist[i][i] = 0;
-    finite[i][i] = true;
+    dist[i][i].weight = 0;
+    dist[i][i].finite = true;
   }
   for (int k = 0; k < label_count; k++)
     for (int i = 0; i < label_count; i++)
       for (int j = 0; j < label_count; j++) {
-        if (!finite[i][k] || !finite[k][j])
-          continue;
-        int new_dist = dist[i][k] + dist[k][j];
-        if (!finite[i][j])
-          dist[i][j] = new_dist;
+        Edge new_dist = dist[i][k] + dist[k][j];
         dist[i][j] = min_val(dist[i][j], new_dist);
-        finite[i][j] = true;
       }
   string res;
   for (int i = 0; i < label_count; i++) {
@@ -392,10 +388,10 @@ string Graph::getAllShortestPaths() {
     for (int j = 0; j < label_count; j++) {
       if (!line.empty())
         line += " ";
-      if (!finite[i][j])
+      if (!dist[i][j].finite)
         line += "INF";
       else
-        line += to_string(dist[i][j]);
+        line += to_string(dist[i][j].weight);
     }
     res += line;
   }
