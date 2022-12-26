@@ -85,11 +85,11 @@ template <typename K, typename V>
 void AVLTree<K, V>::ll_rotate(AVLNode<K, V> *node) {
   auto right_child = node->right, left_left_child = node->left->left,
        left_right_child = node->left->right;
-  swap(node->key, node->left->key);
-  swap(node->value, node->left->value);
-  swap(node->left->left, node->right);
-  swap(node->left->left, node->left->right);
-  swap(node->left, node->right);
+  swap_val(node->key, node->left->key);
+  swap_val(node->value, node->left->value);
+  swap_val(node->left->left, node->right);
+  swap_val(node->left->left, node->left->right);
+  swap_val(node->left, node->right);
   int left_left_height = safe_height(left_left_child),
       left_right_height = safe_height(left_right_child),
       right_height = safe_height(right_child);
@@ -101,11 +101,11 @@ template <typename K, typename V>
 void AVLTree<K, V>::rr_rotate(AVLNode<K, V> *node) {
   auto left_child = node->left, right_left_child = node->right->left,
        right_right_child = node->right->right;
-  swap(node->key, node->right->key);
-  swap(node->value, node->right->value);
-  swap(node->right->right, node->left);
-  swap(node->right->left, node->right->right);
-  swap(node->left, node->right);
+  swap_val(node->key, node->right->key);
+  swap_val(node->value, node->right->value);
+  swap_val(node->right->right, node->left);
+  swap_val(node->right->left, node->right->right);
+  swap_val(node->left, node->right);
   int left_height = safe_height(left_child),
       right_left_height = safe_height(right_left_child),
       right_right_height = safe_height(right_right_child);

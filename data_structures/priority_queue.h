@@ -37,7 +37,7 @@ template <typename T> void PriorityQueue<T>::normalize_subtree(int root) {
       new_index = right_child_index;
     if (new_index == current_index)
       break;
-    swap(internal_arr[current_index], internal_arr[new_index]);
+    swap_val(internal_arr[current_index], internal_arr[new_index]);
     current_index = new_index;
   }
 }
@@ -99,9 +99,9 @@ template <typename T> void PriorityQueue<T>::insert(T element) {
   int current_index = ++node_count;
   while (current_index != 1) {
     int parent_index = current_index / 2;
-    if (internal_arr[current_index] >= internal_arr[parent_index])
+    if (!(internal_arr[current_index] < internal_arr[parent_index]))
       break;
-    swap(internal_arr[current_index], internal_arr[parent_index]);
+    swap_val(internal_arr[current_index], internal_arr[parent_index]);
     current_index = parent_index;
   }
 }
