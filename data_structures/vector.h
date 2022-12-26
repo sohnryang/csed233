@@ -12,10 +12,12 @@ public:
   Vector<T>(const Vector<T> &other);
   ~Vector<T>();
   Vector<T> &operator=(const Vector<T> &other);
+
+  T &operator[](int index);
   const T &operator[](int index) const;
+
   void push_back(T value);
   int size() const;
-  T &operator[](int index);
 };
 
 template <typename T> Vector<T>::Vector() : capacity(1), arr_len(0) {
