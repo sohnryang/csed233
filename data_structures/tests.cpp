@@ -8,6 +8,7 @@
 #include <gtest/gtest.h>
 #include <priority_queue.h>
 #include <sorting.h>
+#include <union_find.h>
 #include <utility>
 #include <utils.h>
 
@@ -468,4 +469,20 @@ TEST(AVLTreeTest, TestPASample) {
   EXPECT_EQ(tree.get_root()->left->left->key, 0);
   EXPECT_EQ(tree.get_root()->left->right->key, 5);
   EXPECT_EQ(tree.get_root()->right->right->key, 15);
+}
+
+TEST(UnionFindTest, TestUnion) {
+  {
+    UnionFind uf(5);
+    EXPECT_FALSE(uf.is_same_set(0, 1));
+    uf.union_set(0, 1);
+    EXPECT_TRUE(uf.is_same_set(0, 1));
+  }
+  {
+    UnionFind uf(100);
+    for (int i = 1; i < 100; i++)
+      uf.union_set(0, i);
+    for (int i = 0; i < 100; i++)
+      EXPECT_TRUE(uf.is_same_set(0, i));
+  }
 }
