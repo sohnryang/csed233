@@ -18,6 +18,8 @@ public:
 
   void push_back(T value);
   int size() const;
+  void clear();
+  void assign(int count, T value);
 };
 
 template <typename T> Vector<T>::Vector() : capacity(1), arr_len(0) {
@@ -80,4 +82,19 @@ template <typename T> T &Vector<T>::operator[](int index) {
 
 template <typename T> const T &Vector<T>::operator[](int index) const {
   return internal_arr[index];
+}
+
+template <typename T> void Vector<T>::clear() {
+  delete[] internal_arr;
+  capacity = 1;
+  arr_len = 0;
+  internal_arr = new T[capacity];
+}
+
+template <typename T> void Vector<T>::assign(int count, T value) {
+  delete[] internal_arr;
+  capacity = arr_len = count;
+  internal_arr = new T[capacity];
+  for (int i = 0; i < arr_len; i++)
+    internal_arr[i] = value;
 }
