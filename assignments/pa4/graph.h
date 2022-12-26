@@ -3,7 +3,8 @@
 #include <iostream>
 #include <string>
 
-#include <deque.h> // expand: true
+#include <deque.h>          // expand: true
+#include <priority_queue.h> // expand: true
 
 // TODO: remove training wheels
 #include <unordered_map>
@@ -16,16 +17,16 @@ using namespace std;
 ///  TODO: Add Your Struct or Functions if required /////
 
 struct Edge {
-  int weight, id;
+  int weight, dest, src;
   string label;
   bool finite;
 
-  Edge() : weight(0), id(0), label(), finite(true) {}
-  Edge(int weight, int id) : weight(weight), id(id), label(), finite(true) {}
+  Edge() : weight(0), dest(0), label(), finite(true) {}
+  Edge(int weight, int id) : weight(weight), dest(id), label(), finite(true) {}
   Edge(int weight, int id, const string &label)
-      : weight(weight), id(id), label(label), finite(true) {}
+      : weight(weight), dest(id), label(label), finite(true) {}
   Edge(bool finite, int id, const string &label)
-      : weight(0), id(id), label(label), finite(finite) {}
+      : weight(0), dest(id), label(label), finite(finite) {}
   bool operator<(const Edge &another) {
     if (!this->finite)
       return false;
@@ -39,8 +40,8 @@ struct Edge {
   }
   Edge operator+(const Edge &another) {
     if (!this->finite || !another.finite)
-      return Edge(false, another.id, "");
-    return Edge(this->weight + another.weight, another.id);
+      return Edge(false, another.dest, "");
+    return Edge(this->weight + another.weight, another.dest);
   }
 };
 
@@ -53,7 +54,6 @@ public:
   ~Graph(){};
 
   string DFS();
-  void sortGraph();
   string BFS();
 
   int addDirectedEdge(string nodeA, string nodeB);
@@ -74,14 +74,17 @@ private:
   //////  TODO: Add private members if required ///////////
 
   int getNodeId(const string &label);
+  void sortGraph();
+  void sortGraph(vector<vector<Edge>> &graph);
   void sortByLabel(vector<Edge> &arr);
-  void merge_arr(vector<Edge> &arr, int lo, int mid, int hi);
-  void dfs_traverse(int here_id, vector<bool> &visited, vector<int> &visit_seq);
-  void count_cycles(int here_id, int parent_id, vector<int> &parent,
-                    vector<int> &visited, int &count);
-  bool check_dag(int here_id, vector<int> &visited);
-  void topological_sort(int here_id, vector<bool> &visited,
-                        Deque<int> &sort_result);
+  void mergeArr(vector<Edge> &arr, int lo, int mid, int hi);
+  void dfsTraverse(int here_id, vector<bool> &visited, vector<int> &visit_seq);
+  void countCycles(int here_id, int parent_id, vector<int> &parent,
+                   vector<int> &visited, int &count);
+  bool checkDag(int here_id, vector<int> &visited);
+  void topologicalSort(int here_id, vector<bool> &visited,
+                       Deque<int> &sort_result);
+  void addAdjacent(int here_id, PriorityQueue<Edge> &pq, vector<bool> &added);
 
   int label_count;
   unordered_map<string, int> label_id_table;
