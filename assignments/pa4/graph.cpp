@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 
+#include <priority_queue.h>
+#include <utils.h> // expand: true
 #define INF 2147483647
 using namespace std;
 
@@ -202,7 +204,7 @@ int Graph::addDirectedEdge(string nodeA, string nodeB, int weight) {
   for (int i = 0; i < graph[nodeA_id].size(); i++) {
     if (graph[nodeA_id][i].id != nodeB_id)
       continue;
-    graph[nodeA_id][i].weight = min(weight, graph[nodeA_id][i].weight);
+    graph[nodeA_id][i].weight = min_val(weight, graph[nodeA_id][i].weight);
     return 0;
   }
   graph[nodeA_id].push_back(Edge(weight, nodeB_id));

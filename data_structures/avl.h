@@ -93,8 +93,8 @@ void AVLTree<K, V>::ll_rotate(AVLNode<K, V> *node) {
   int left_left_height = safe_height(left_left_child),
       left_right_height = safe_height(left_right_child),
       right_height = safe_height(right_child);
-  node->right->height = 1 + max(left_right_height, right_height);
-  node->height = 1 + max(node->right->height, left_left_height);
+  node->right->height = 1 + max_val(left_right_height, right_height);
+  node->height = 1 + max_val(node->right->height, left_left_height);
 }
 
 template <typename K, typename V>
@@ -109,8 +109,8 @@ void AVLTree<K, V>::rr_rotate(AVLNode<K, V> *node) {
   int left_height = safe_height(left_child),
       right_left_height = safe_height(right_left_child),
       right_right_height = safe_height(right_right_child);
-  node->left->height = 1 + max(left_height, right_left_height);
-  node->height = 1 + max(node->left->height, right_right_height);
+  node->left->height = 1 + max_val(left_height, right_left_height);
+  node->height = 1 + max_val(node->left->height, right_right_height);
 }
 
 template <typename K, typename V>
@@ -161,7 +161,7 @@ template <typename K, typename V> void AVLTree<K, V>::insert(K key, V value) {
     bool is_left = child_dir.pop_back();
     int left_height = safe_height(current->left),
         right_height = safe_height(current->right);
-    current->height = 1 + max(left_height, right_height);
+    current->height = 1 + max_val(left_height, right_height);
     if (abs(current->balancing_factor()) > 1) {
       if (is_left) {
         if (child_bf >= 0)
@@ -238,7 +238,7 @@ template <typename K, typename V> void AVLTree<K, V>::remove(K key) {
     bool is_left = child_dir.pop_back();
     int left_height = safe_height(current->left),
         right_height = safe_height(current->right);
-    current->height = 1 + max(left_height, right_height);
+    current->height = 1 + max_val(left_height, right_height);
     if (abs(current->balancing_factor()) > 1) {
       if (first) {
         if (current->left != nullptr && current->right != nullptr)
