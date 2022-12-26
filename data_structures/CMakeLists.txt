@@ -34,6 +34,9 @@ target_include_directories(AVL INTERFACE "${DATA_STRUCTURE_INCLUDE}")
 add_library(UnionFind INTERFACE)
 target_sources(UnionFind INTERFACE union_find.h)
 
+add_library(Vector INTERFACE)
+target_sources(Vector INTERFACE vector.h)
+
 enable_testing()
 add_compile_options("$<$<CONFIG:DEBUG>:-fno-omit-frame-pointer>")
 add_compile_options("$<$<CONFIG:DEBUG>:-fsanitize=address>")
@@ -41,7 +44,7 @@ add_link_options("$<$<CONFIG:DEBUG>:-fsanitize=address>")
 
 add_executable(tests tests.cpp)
 target_include_directories(tests PRIVATE "${DATA_STRUCTURE_INCLUDE}")
-target_link_libraries(tests PRIVATE GTest::gtest_main PRIVATE DoubleLinkedList PRIVATE Deque PRIVATE PriorityQueue PRIVATE Utils PRIVATE BST PRIVATE Sorting PRIVATE AVL PRIVATE UnionFind)
+target_link_libraries(tests PRIVATE GTest::gtest_main PRIVATE DoubleLinkedList PRIVATE Deque PRIVATE PriorityQueue PRIVATE Utils PRIVATE BST PRIVATE Sorting PRIVATE AVL PRIVATE UnionFind PRIVATE Vector)
 target_compile_options(tests PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,leak>")
 target_link_options(tests PRIVATE "$<$<C_COMPILER_ID:Clang>:-fsanitize=address,leak>")
 include(GoogleTest)

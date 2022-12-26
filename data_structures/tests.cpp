@@ -11,6 +11,7 @@
 #include <union_find.h>
 #include <utility>
 #include <utils.h>
+#include <vector.h>
 
 TEST(DoubleLinkedListTest, TestInit) {
   DoubleLinkedList<int> dl;
@@ -485,4 +486,22 @@ TEST(UnionFindTest, TestUnion) {
     for (int i = 0; i < 100; i++)
       EXPECT_TRUE(uf.is_same_set(0, i));
   }
+}
+
+TEST(VectorTest, TestInit) {
+  Vector<int> vec(10, 42);
+  for (int i = 0; i < 10; i++)
+    EXPECT_EQ(vec[i], 42);
+  EXPECT_EQ(vec.size(), 10);
+  vec[0] = 0;
+  EXPECT_EQ(vec[0], 0);
+}
+
+TEST(VectorTest, TestPush) {
+  Vector<int> vec;
+  for (int i = 0; i < 10; i++)
+    vec.push_back(i);
+  EXPECT_EQ(vec.size(), 10);
+  for (int i = 0; i < 10; i++)
+    EXPECT_EQ(vec[i], i);
 }
