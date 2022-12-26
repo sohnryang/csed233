@@ -23,7 +23,28 @@ int Graph::getNodeId(const string &label) {
   return id;
 }
 
-void Graph::mergeArr(vector<Edge> &arr, int lo, int mid, int hi) {
+Graph::LabelComparator::LabelComparator(const Graph &parent) : parent(parent) {}
+
+int Graph::LabelComparator::operator()(const Edge &edge1,
+                                       const Edge &edge2) const {
+  return parent.labels[edge1.dest].compare(parent.labels[edge2.dest]);
+}
+
+Graph::WeightComparator::WeightComparator(const Graph &parent)
+    : parent(parent) {}
+
+int Graph::WeightComparator::operator()(const Edge &edge1,
+                                        const Edge &edge2) const {
+  if (edge1.weight != edge2.weight)
+    return edge1.weight - edge2.weight;
+  if (edge1.src != edge2.src)
+    return parent.labels[edge1.src].compare(parent.labels[edge2.src]);
+  return parent.labels[edge1.dest].compare(parent.labels[edge2.dest]);
+}
+
+template <typename T>
+void Graph::mergeArr(vector<Edge> &arr, const T &comparator, int lo, int mid,
+                     int hi) {
   std::vector<Edge> left_arr(mid - lo), right_arr(hi - mid);
   for (int i = 0; i < mid - lo; i++)
     left_arr[i] = arr[lo + i];
@@ -31,7 +52,7 @@ void Graph::mergeArr(vector<Edge> &arr, int lo, int mid, int hi) {
     right_arr[i] = arr[mid + i];
   int left_idx = 0, right_idx = 0, arr_idx = lo;
   while (left_idx < mid - lo && right_idx < hi - mid) {
-    if (labels[left_arr[left_idx].dest] < labels[right_arr[right_idx].dest])
+    if (comparator(left_arr[left_idx], right_arr[right_idx]) < 0)
       arr[arr_idx++] = left_arr[left_idx++];
     else
       arr[arr_idx++] = right_arr[right_idx++];
@@ -42,12 +63,13 @@ void Graph::mergeArr(vector<Edge> &arr, int lo, int mid, int hi) {
     arr[arr_idx++] = right_arr[right_idx++];
 }
 
-void Graph::sortByLabel(vector<Edge> &arr) {
+template <typename T>
+void Graph::sortEdges(vector<Edge> &arr, const T &comparator) {
   for (int subarr_size = 1; subarr_size < arr.size(); subarr_size *= 2) {
     for (int lo = 0; lo < arr.size(); lo += 2 * subarr_size) {
       int mid = std::min(lo + subarr_size, (int)arr.size()),
           hi = std::min(mid + subarr_size, (int)arr.size());
-      mergeArr(arr, lo, mid, hi);
+      mergeArr(arr, comparator, lo, mid, hi);
     }
   }
 }
@@ -67,7 +89,7 @@ void Graph::sortGraph() { sortGraph(graph); }
 
 void Graph::sortGraph(vector<vector<Edge>> &graph) {
   for (int i = 0; i < label_count; i++)
-    sortByLabel(graph[i]);
+    sortEdges(graph[i], LabelComparator(*this));
 }
 
 void Graph::countCycles(int here_id, int parent_id, vector<int> &parent,
@@ -137,7 +159,7 @@ string Graph::DFS() {
   vector<Edge> nodes(label_count);
   for (int i = 0; i < label_count; i++)
     nodes[i] = Edge(0, i);
-  sortByLabel(nodes);
+  sortEdges(nodes, LabelComparator(*this));
   sortGraph();
   vector<bool> visited(label_count, false);
   vector<int> visit_seq;
@@ -167,7 +189,7 @@ string Graph::BFS() {
   vector<Edge> nodes(label_count);
   for (int i = 0; i < label_count; i++)
     nodes[i] = Edge(0, i);
-  sortByLabel(nodes);
+  sortEdges(nodes, LabelComparator(*this));
   sortGraph();
   vector<bool> visited(label_count, false);
   string result;
@@ -276,7 +298,7 @@ string Graph::getTopologicalSort() {
   vector<Edge> nodes(label_count);
   for (int i = 0; i < label_count; i++)
     nodes[i] = Edge(0, i);
-  sortByLabel(nodes);
+  sortEdges(nodes, LabelComparator(*this));
   vector<bool> visited(label_count, false);
   Deque<int> sort_result;
   for (int i = label_count - 1; i >= 0; i--) {
@@ -367,7 +389,7 @@ string Graph::getAllShortestPaths() {
   vector<Edge> nodes(label_count);
   for (int i = 0; i < label_count; i++)
     nodes[i] = Edge(0, i);
-  sortByLabel(nodes);
+  sortEdges(nodes, LabelComparator(*this));
   vector<int> node_id_inv(label_count);
   for (int i = 0; i < label_count; i++)
     node_id_inv[nodes[i].dest] = i;

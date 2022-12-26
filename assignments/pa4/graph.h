@@ -74,11 +74,32 @@ private:
   /////////////////////////////////////////////////////////
   //////  TODO: Add private members if required ///////////
 
+  class LabelComparator {
+  private:
+    const Graph &parent;
+
+  public:
+    LabelComparator(const Graph &parent);
+    int operator()(const Edge &edge1, const Edge &edge2) const;
+  };
+
+  class WeightComparator {
+  private:
+    const Graph &parent;
+
+  public:
+    WeightComparator(const Graph &parent);
+    int operator()(const Edge &edge1, const Edge &edge2) const;
+  };
+
   int getNodeId(const string &label);
+  int compareByLabel(const Edge &edge1, const Edge &edge2);
   void sortGraph();
   void sortGraph(vector<vector<Edge>> &graph);
-  void sortByLabel(vector<Edge> &arr);
-  void mergeArr(vector<Edge> &arr, int lo, int mid, int hi);
+  template <typename T> void sortEdges(vector<Edge> &arr, const T &comparator);
+  template <typename T>
+  void mergeArr(vector<Edge> &arr, const T &comparator, int lo, int mid,
+                int hi);
   void dfsTraverse(int here_id, vector<bool> &visited, vector<int> &visit_seq);
   void countCycles(int here_id, int parent_id, vector<int> &parent,
                    vector<int> &visited, int &count);
