@@ -505,3 +505,9 @@ TEST(VectorTest, TestPush) {
   for (int i = 0; i < 10; i++)
     EXPECT_EQ(vec[i], i);
 }
+
+TEST(VectorTest, TestClear) {
+  Vector<int> vec(10, 42);
+  vec.clear();
+  EXPECT_EQ(vec.size(), 0);
+}
