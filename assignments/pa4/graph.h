@@ -4,13 +4,12 @@
 #include <string>
 
 #include <deque.h>          // expand: true
+#include <hashmap.h>        // expand: true
 #include <priority_queue.h> // expand: true
 #include <union_find.h>     // expand: true
 #include <utils.h>          // expand: true
 #include <vector.h>         // expand: true
 
-// TODO: remove training wheels
-#include <unordered_map>
 #define NodeMaxCount 101
 #define INF 2147483647
 using namespace std;
@@ -52,7 +51,9 @@ struct Edge {
 
 class Graph {
 public:
-  Graph() : label_count(0), label_id_table(), labels(), graph{} {};
+  Graph()
+      : label_count(0), label_id_table(SipHash("Thank you CSED233 TAs!")),
+        labels(), graph{} {};
   ~Graph(){};
 
   string DFS();
@@ -110,7 +111,7 @@ private:
   void addAdjacent(int here_id, PriorityQueue<Edge> &pq, Vector<bool> &added);
 
   int label_count;
-  unordered_map<string, int> label_id_table;
+  HashMap<string, int, SipHash> label_id_table;
   Vector<string> labels;
   Vector<Vector<Edge>> graph;
 

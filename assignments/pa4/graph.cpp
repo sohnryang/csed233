@@ -16,7 +16,7 @@ int Graph::getNodeId(const string &label) {
     id = label_id_table[label];
   else {
     id = label_count++;
-    label_id_table[label] = id;
+    label_id_table.insert(label, id);
     labels.push_back(label);
     Vector<Edge> vec;
     graph.push_back(vec);
