@@ -6,6 +6,13 @@ target_link_libraries(pa4 PRIVATE Deque)
 add_executable(pa4_eval evaluate.cpp)
 set(PA4_SRC_DIR "${CMAKE_BINARY_DIR}/pa4_src")
 file(MAKE_DIRECTORY "${PA4_SRC_DIR}")
+add_custom_target(pa4_src ALL
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA4_SRC_DIR}/graph.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/graph.cpp"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA4_SRC_DIR}/graph.h" "${CMAKE_CURRENT_SOURCE_DIR}/graph.h"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA4_SRC_DIR}/pa4.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/pa4.cpp"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA4_SRC_DIR}/utils.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/utils.cpp"
+  COMMAND "${TOOLS_DIR}/expand_header.py" -I "${DATA_STRUCTURE_INCLUDE}" -o "${PA4_SRC_DIR}/utils.h" "${CMAKE_CURRENT_SOURCE_DIR}/utils.h"
+)
 
 pa_test(pa4 1 "\"[('A','C'), ('A','B'), ('A','D'), ('B','C'), ('B','D'), ('B','E'), ('B','F'), ('C','F'), ('C','E'), ('End','DFS')]\"" "A B C E F D")
 pa_test(pa4 1 "\"[('A','C'), ('A','B'), ('A','D'), ('B','C'), ('B','D'), ('B','E'), ('B','F'), ('C','F'), ('C','E'), ('End','BFS')]\"" "A B C D E F")
