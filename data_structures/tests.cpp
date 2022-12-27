@@ -6,8 +6,10 @@
 #include <deque.h>
 #include <double_linked_list.h>
 #include <gtest/gtest.h>
+#include <hashmap.h>
 #include <priority_queue.h>
 #include <sorting.h>
+#include <string>
 #include <union_find.h>
 #include <utility>
 #include <utils.h>
@@ -517,4 +519,50 @@ TEST(VectorTest, TestAssign) {
   vec.assign(10, 42);
   for (int i = 0; i < 10; i++)
     EXPECT_EQ(vec[i], 42);
+}
+
+TEST(SipHashTest, TestVector) {
+  char key[16] = {0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7,
+                  0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf};
+  char message[15] = {0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7,
+                      0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe};
+  SipHash hasher(key);
+  EXPECT_EQ(hasher(message, 15), 0xa129ca6149be45e5);
+}
+
+TEST(HashMapTest, TestInsert) {
+  char key[16] = {0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7,
+                  0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf};
+  SipHash hasher(key);
+  HashMap<std::string, int, SipHash> hashmap(hasher);
+  for (int i = 0; i < 1024; i++)
+    hashmap.insert(std::to_string(i), i);
+  for (int i = 0; i < 1024; i++) {
+    EXPECT_EQ(hashmap.count(std::to_string(i)), 1);
+    EXPECT_EQ(hashmap[std::to_string(i)], i);
+  }
+}
+
+TEST(HashMapTest, TestRemove) {
+  char key[16] = {0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7,
+                  0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf};
+  SipHash hasher(key);
+  HashMap<std::string, int, SipHash> hashmap(hasher);
+  for (int i = 0; i < 1024; i++)
+    hashmap.insert(std::to_string(i), i);
+  for (int i = 0; i < 1024; i++)
+    hashmap.remove(std::to_string(i));
+  for (int i = 0; i < 1024; i++)
+    EXPECT_EQ(hashmap.count(std::to_string(i)), 0);
+}
+
+TEST(HashMapTest, TestIndex) {
+  char key[16] = {0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7,
+                  0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf};
+  SipHash hasher(key);
+  HashMap<std::string, int, SipHash> hashmap(hasher);
+  hashmap.insert("abcd", 0);
+  EXPECT_EQ(hashmap["abcd"], 0);
+  hashmap["abcd"] = 42;
+  EXPECT_EQ(hashmap["abcd"], 42);
 }
