@@ -25,28 +25,29 @@ if __name__ == "__main__":
 
     with open(args.output, "w") as out_file:
         out_file.write("// AUTO GENERATED FILE -- DO NOT EDIT!\n")
-        file_stack = [open(args.file)]
-        expanded_files = set([args.file])
+        file_stack = [(Path(args.file), int(0))]
+        expanded_files = set([Path(args.file)])
         while file_stack:
-            f = file_stack[-1]
-            while True:
-                line = f.readline()
-                if not line:
-                    file_stack.pop()
-                    break
+            filename, offset = file_stack.pop()
+            with open(filename) as f:
+                f.seek(offset)
+                while line := f.readline():
+                    pragma_match = re.match(pragma_pattern, line)
+                    if pragma_match is not None and not filename.samefile(args.file):
+                        out_file.write("// ")
 
-                pragma_match = re.match(pragma_pattern, line)
-                if pragma_match is not None and f != file_stack[0]:
-                    out_file.write("// ")
-
-                regex_match = re.match(expand_include_pattern, line)
-                if regex_match is None:
-                    out_file.write(line)
-                else:
+                    regex_match = re.match(expand_include_pattern, line)
+                    if regex_match is None:
+                        out_file.write(line)
+                        continue
                     header_name = regex_match.group(1)
                     abs_path = find_header(header_name, args.include)
-                    if str(abs_path) in expanded_files:
+                    if abs_path is None:
+                        out_file.write(line)
                         continue
-                    file_stack.append(open(str(abs_path)))
-                    expanded_files.add(str(abs_path))
+                    if abs_path in expanded_files:
+                        continue
+                    file_stack.append((filename, f.tell()))
+                    file_stack.append((abs_path, 0))
+                    expanded_files.add(abs_path)
                     break
