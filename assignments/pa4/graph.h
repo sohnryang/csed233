@@ -46,6 +46,13 @@ struct Edge {
   }
 };
 
+class StringComparator {
+public:
+  int operator()(const string &str1, const string &str2) const {
+    return str1.compare(str2);
+  }
+};
+
 ///////////      End of Implementation      /////////////
 /////////////////////////////////////////////////////////
 
