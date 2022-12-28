@@ -37,6 +37,8 @@ pa_test(pa4 4 "\"[('A','B'), ('A','C'), ('C','D'), ('E','C'), ('D','B'), ('D','E
 pa_test(pa4 5 "\"[('A-B',10),('A-C',3),('B-D',5),('C-B',2),('C-E',15),('A-D',20),('D-E',11),('A','E')]\"" "A C E 18")
 pa_test(pa4 5 "\"[('A-B',10),('A-C',3),('B-D',5),('C-B',2),('C-E',15),('A-D',20),('D-E',11),('A','D')]\"" "A C B D 10")
 pa_test(pa4 5 "\"[('A-B',10),('A-C',3),('B-D',5),('C-B',2),('C-E',15),('A-D',20),('D-E',11),('D','A')]\"" "error")
+pa_test(pa4 5 "\"[('A-B',3),('A-C',4),('B-D',2),('C-D',1),('D-E',2),('A-E',7),('A','E')]\"" "A B D E 7\nA C D E 7\nA E 7")
+pa_test(pa4 5 "\"[('A-B',3),('A-C',4),('B-D',2),('C-D',1),('D-E',2),('A-E',7),('A-D',5),('A','E')]\"" "A B D E 7\nA C D E 7\nA D E 7\nA E 7")
 pa_test(pa4 6 "\"[('A-B',4),('B-C',9),('B-D',1),('C-D',10),('D-C',8),('D-A',-2)]\"" "0 4 13 5\n-1 0 9 1\n8 12 0 10\n-2 2 8 0")
 pa_test(pa4 6 "\"[('A-B',4),('A-F',3),('B-F',6),('B-C',9),('F-E',-2),('E-F',5),('C-E',-3),('E-C',8),('E-D',6)]\"" "0 4 9 7 1 3\nINF 0 9 10 4 6\nINF INF 0 3 -3 2\nINF INF INF 0 INF INF\nINF INF 8 6 0 5\nINF INF 6 4 -2 0")
 pa_test(pa4 6 "\"[('A-B',4),('B-C',9),('C-E',-2),('E-C',8),('B-H',1),('A-H',4),('H-C',3),('B-F',6),('A-G',7),('G-B',-4),('B-G',8),('G-F',7),('F-E',6),('E-F',5),('E-D',6)]\"" "0 3 7 11 5 9 7 4\nINF 0 4 8 2 6 8 1\nINF INF 0 4 -2 3 INF INF\nINF INF INF 0 INF INF INF INF\nINF INF 8 6 0 5 INF INF\nINF INF 14 12 6 0 INF INF\nINF -4 0 4 -2 2 0 -3\nINF INF 3 7 1 6 INF 0")

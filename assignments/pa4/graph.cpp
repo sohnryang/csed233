@@ -342,7 +342,6 @@ string Graph::getShortestPath(string source, string destination) {
   //////////  TODO: Implement From Here      //////////////
   sortGraph();
   Vector<int> dist(label_count, -1);
-  Vector<int> parent(label_count, -1);
   int source_id = label_id_table[source];
   dist[source_id] = 0;
   PriorityQueue<Edge> pq;
@@ -356,9 +355,8 @@ string Graph::getShortestPath(string source, string destination) {
     for (int i = 0; i < graph[here_id].size(); i++) {
       int there_id = graph[here_id][i].dest;
       int there_dist = here_dist + graph[here_id][i].weight;
-      if (dist[there_id] == -1 || dist[there_id] > there_dist) {
+      if (dist[there_id] == -1 || dist[there_id] >= there_dist) {
         dist[there_id] = there_dist;
-        parent[there_id] = here_id;
         pq.insert(Edge(there_dist, there_id, labels[there_id]));
       }
     }
@@ -366,18 +364,51 @@ string Graph::getShortestPath(string source, string destination) {
   int dest_id = label_id_table[destination];
   if (dist[dest_id] == -1)
     return "error";
-  Deque<int> path;
-  int current = dest_id;
-  while (current != -1) {
-    path.push_front(current);
-    current = parent[current];
+  Deque<Edge> q;
+  Deque<Vector<int>> path_queue;
+  q.push_back(Edge(0, source_id));
+  Vector<int> initial_path;
+  initial_path.push_back(source_id);
+  path_queue.push_back(initial_path);
+  Vector<string> paths;
+  while (!q.empty()) {
+    Edge here_edge = q.pop_front();
+    int here_id = here_edge.dest, here_dist = here_edge.weight;
+    Vector<int> here_path = path_queue.pop_front();
+    if (here_id == dest_id) {
+      if (here_dist == dist[dest_id]) {
+        string line;
+        for (int i = 0; i < here_path.size(); i++)
+          line += labels[here_path[i]] + " ";
+        line += to_string(dist[dest_id]);
+        paths.push_back(line);
+      }
+      continue;
+    }
+    for (int i = 0; i < graph[here_id].size(); i++) {
+      int there_id = graph[here_id][i].dest,
+          there_dist = graph[here_id][i].weight;
+      bool cycle = false;
+      for (int j = 0; j < here_path.size(); j++)
+        if (here_path[j] == there_id) {
+          cycle = true;
+          break;
+        }
+      if (cycle)
+        continue;
+      q.push_back(Edge(here_dist + there_dist, there_id));
+      Vector<int> there_path = here_path;
+      there_path.push_back(there_id);
+      path_queue.push_back(there_path);
+    }
   }
+  sortVector(paths, StringComparator());
   string res;
-  while (!path.empty()) {
-    res += labels[path.pop_front()];
-    res += " ";
+  for (int i = 0; i < paths.size(); i++) {
+    if (!res.empty())
+      res += "\n";
+    res += paths[i];
   }
-  res += to_string(dist[dest_id]);
   return res;
   ///////////      End of Implementation      /////////////
   /////////////////////////////////////////////////////////
