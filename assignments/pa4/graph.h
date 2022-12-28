@@ -98,10 +98,10 @@ private:
   int compareByLabel(const Edge &edge1, const Edge &edge2);
   void sortGraph();
   void sortGraph(Vector<Vector<Edge>> &graph);
-  template <typename T> void sortEdges(Vector<Edge> &arr, const T &comparator);
-  template <typename T>
-  void mergeArr(Vector<Edge> &arr, const T &comparator, int lo, int mid,
-                int hi);
+  template <typename T, typename C>
+  void sortVector(Vector<T> &arr, const C &comparator);
+  template <typename T, typename C>
+  void mergeArr(Vector<T> &arr, const C &comparator, int lo, int mid, int hi);
   void dfsTraverse(int here_id, Vector<bool> &visited, Vector<int> &visit_seq);
   void countCycles(int here_id, int parent_id, Vector<int> &parent,
                    Vector<int> &visited, int &count);

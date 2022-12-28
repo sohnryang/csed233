@@ -43,10 +43,10 @@ int Graph::WeightComparator::operator()(const Edge &edge1,
   return parent.labels[edge1.dest].compare(parent.labels[edge2.dest]);
 }
 
-template <typename T>
-void Graph::mergeArr(Vector<Edge> &arr, const T &comparator, int lo, int mid,
+template <typename T, typename C>
+void Graph::mergeArr(Vector<T> &arr, const C &comparator, int lo, int mid,
                      int hi) {
-  Vector<Edge> left_arr(mid - lo), right_arr(hi - mid);
+  Vector<T> left_arr(mid - lo), right_arr(hi - mid);
   for (int i = 0; i < mid - lo; i++)
     left_arr[i] = arr[lo + i];
   for (int i = 0; i < hi - mid; i++)
@@ -64,8 +64,8 @@ void Graph::mergeArr(Vector<Edge> &arr, const T &comparator, int lo, int mid,
     arr[arr_idx++] = right_arr[right_idx++];
 }
 
-template <typename T>
-void Graph::sortEdges(Vector<Edge> &arr, const T &comparator) {
+template <typename T, typename C>
+void Graph::sortVector(Vector<T> &arr, const C &comparator) {
   for (int subarr_size = 1; subarr_size < arr.size(); subarr_size *= 2) {
     for (int lo = 0; lo < arr.size(); lo += 2 * subarr_size) {
       int mid = std::min(lo + subarr_size, (int)arr.size()),
@@ -90,7 +90,7 @@ void Graph::sortGraph() { sortGraph(graph); }
 
 void Graph::sortGraph(Vector<Vector<Edge>> &graph) {
   for (int i = 0; i < label_count; i++)
-    sortEdges(graph[i], LabelComparator(*this));
+    sortVector(graph[i], LabelComparator(*this));
 }
 
 void Graph::countCycles(int here_id, int parent_id, Vector<int> &parent,
@@ -160,7 +160,7 @@ string Graph::DFS() {
   Vector<Edge> nodes(label_count);
   for (int i = 0; i < label_count; i++)
     nodes[i] = Edge(0, i);
-  sortEdges(nodes, LabelComparator(*this));
+  sortVector(nodes, LabelComparator(*this));
   sortGraph();
   Vector<bool> visited(label_count, false);
   Vector<int> visit_seq;
@@ -190,7 +190,7 @@ string Graph::BFS() {
   Vector<Edge> nodes(label_count);
   for (int i = 0; i < label_count; i++)
     nodes[i] = Edge(0, i);
-  sortEdges(nodes, LabelComparator(*this));
+  sortVector(nodes, LabelComparator(*this));
   sortGraph();
   Vector<bool> visited(label_count, false);
   string result;
@@ -299,7 +299,7 @@ string Graph::getTopologicalSort() {
   Vector<Edge> nodes(label_count);
   for (int i = 0; i < label_count; i++)
     nodes[i] = Edge(0, i);
-  sortEdges(nodes, LabelComparator(*this));
+  sortVector(nodes, LabelComparator(*this));
   Vector<bool> visited(label_count, false);
   Deque<int> sort_result;
   for (int i = label_count - 1; i >= 0; i--) {
@@ -390,7 +390,7 @@ string Graph::getAllShortestPaths() {
   Vector<Edge> nodes(label_count);
   for (int i = 0; i < label_count; i++)
     nodes[i] = Edge(0, i);
-  sortEdges(nodes, LabelComparator(*this));
+  sortVector(nodes, LabelComparator(*this));
   Vector<int> node_id_inv(label_count);
   for (int i = 0; i < label_count; i++)
     node_id_inv[nodes[i].dest] = i;
@@ -476,7 +476,7 @@ int Graph::kruskalMST(ofstream &fout) {
       edges.push_back(edge);
     }
   }
-  sortEdges(edges, WeightComparator(*this));
+  sortVector(edges, WeightComparator(*this));
   UnionFind uf(label_count);
   int mst_cost = 0;
   for (int i = 0; i < edges.size(); i++) {
